@@ -1,13 +1,13 @@
 //Declarações do cabeçalho/registro binário
 
 #ifndef STORAGE_H
-#define STORAGE_C
+#define STORAGE_H
 
 //Cabeçalho do arquivo
 typedef struct {
-    int pos_cabeca;
-    int pos_topo;
-    int pos_livre;
+    long pos_cabeca;
+    long pos_topo;
+    long pos_livre;
 } cabecalho;
 
 #endif
