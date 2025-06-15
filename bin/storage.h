@@ -18,6 +18,7 @@ typedef struct
 {
     long pos_cabeca;
     long pos_topo;
+    long pos_livre;
 } cabecalho;
 
 // Banco de dados

@@ -14,6 +14,16 @@ int abrir_database(database *db);
 
 void fechar_database(database *db);
 
+void escreve_cabecalho(FILE *arq, cabecalho *cab);
+
+cabecalho * le_cabecalho(FILE *arq);
+
+void cria_lista_vazia(FILE *arq);
+
+livro * le_livro(FILE *arq, int pos);
+
+void escreve_livro(FILE *arq, livro *novo, int pos);
+
 //Inicia o sistema e gerencia escolhas do usuário
 void iniciar_sistema(database *db);
 

@@ -1,14 +1,35 @@
-//Implementação
+// Implementação
 
 #include "livro.h"
+#include "../../bin/system.h"
 #include <stdio.h>
 
-void cadastrar_livro(FILE *arq_livros) {
+static void insere_livro_cabeca(FILE *arq, livro novo)
+{
 
-    cabecalho cab;
+    cabecalho *cab = le_cabecalho(arq);
+    novo.prox_pos = cab->pos_cabeca;
 
-    fseek(arq_livros, 0, SEEK_SET);
-    fread(&cab, sizeof(cabecalho), 1, arq_livros);
+    if (cab->pos_livre == -1)
+    { // sem livros para reciclar a posicao
+        escreve_livro(arq, &novo, cab->pos_topo);
+        cab->pos_cabeca = cab->pos_topo; // a cabeca da lista agora eh a onde colocamos o novo livro
+        cab->pos_topo++;
+    }
+    else
+    {
+        livro *aux = le_livro(arq, cab->pos_livre);
+        escreve_livro(arq, &novo, cab->pos_livre);
+        cab->pos_cabeca = cab->pos_livre;
+        cab->pos_livre = aux->prox_pos;
+        free(aux);
+    }
+    escreve_cabecalho(arq, cab);
+    free(cab);
+}
+
+void cadastrar_livro(FILE *arq_livros)
+{
 
     livro novo_livro;
 
@@ -30,27 +51,84 @@ void cadastrar_livro(FILE *arq_livros) {
     scanf("%d%*c", &novo_livro.exemplares);
     printf("====================================\n");
 
-    //Inserção na cabeça
-    novo_livro.prox_pos = cab.pos_cabeca;
-
-    fseek(arq_livros, cab.pos_topo, SEEK_SET);
-    fwrite(&novo_livro, sizeof(livro), 1, arq_livros);
-
-    cab.pos_cabeca = cab.pos_topo;
-    cab.pos_topo = ftell(arq_livros);
-
-    fseek(arq_livros, 0, SEEK_SET);
-    fwrite(&cab, sizeof(cabecalho), 1, arq_livros);
+    insere_livro_cabeca(arq_livros, novo_livro);
 
     printf("\n Livro cadastrado com sucesso!\n");
 }
 
-//void imprimir_dados_livro(FILE *arq_livros) {}
+static int busca_livro(FILE *arq, int pos, livro *destino)
+{
 
-//void listar_livros(FILE *arq_livros) {}
- 
-//void buscar_titulo(FILE *arq_livros) {}
+    fseek(arq, sizeof(cabecalho) + pos * sizeof(livro), SEEK_SET);
 
-//void calcular_total(FILE *arq_livros) {}
+    if (fread(destino, sizeof(livro), 1, arq) == 1)
+        return 1;
 
-//void carregar_lote(FILE *arq_livros) {}
+    return 0;
+}
+
+void imprimir_dados_livro(FILE *arq_livros)
+{
+
+    int codigo;
+
+    printf("\nInsira o codigo do livro que esta buscando: ");
+    scanf("%d%*c", &codigo);
+
+    cabecalho *c = le_cabecalho(arq_livros);
+
+    if (!c)
+    {
+        printf("ERRO: Nao foi possivel ler o arquivo de livros.\n");
+        return;
+    }
+
+    int pos = c->pos_cabeca;
+    int flag = 0;
+    livro *aux = (livro *)malloc(sizeof(livro));
+
+    // enquanto a lista nao chegar ao fim, a busca do livro nao for bem sucedida e o codigo nao for igual, a pos recebe a prox pos da lista
+    while (pos != -1 && !flag)
+    {
+
+        if (busca_livro(arq_livros, pos, aux))
+        {
+            if (aux->codigo == codigo)
+                flag = 1;
+            else
+                pos = aux->prox_pos;
+        }
+        else
+            pos = -1;
+    }
+
+    // quer dizer que encontrou o codigo na lista
+    if (pos != -1)
+    {
+        printf("\n=========== Livro ===========\n");
+        printf("Codigo : %d\n", aux->codigo);
+        printf("Titulo: %s\n", aux->titulo);
+        printf("Autor: %s\n", aux->autor);
+        printf("Editora: %s\n", aux->editora);
+        printf("Numero da edicao: %d\n", aux->edicao);
+        printf("Ano: %d\n", aux->ano);
+        printf("Quantidade de exemplares: %d", aux->exemplares);
+        printf("\n=============================\n");
+    }
+
+    // chegou ao final da lista e nao encontrou
+    else
+    {
+        printf("\n--> Sentimos muito, o livro com codigo '%d' nao existe em nosso historico ou nao foi encontrado... <--\n", codigo);
+    }
+    free(aux);
+    free(c);
+}
+
+// void listar_livros(FILE *arq_livros) {}
+
+// void buscar_titulo(FILE *arq_livros) {}
+
+// void calcular_total(FILE *arq_livros) {}
+
+// void carregar_lote(FILE *arq_livros) {}
