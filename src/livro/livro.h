@@ -9,7 +9,6 @@
 #include <string.h>
 #include <stdio.h>
 
-
 //Cadastra um livro
 void cadastrar_livro(FILE *arq_livros);
 
