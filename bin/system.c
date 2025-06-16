@@ -108,10 +108,24 @@ livro *le_livro(FILE *arq, int pos)
     return novo;
 }
 
+usuario *le_usuario(FILE *arq, int pos)
+{
+
+    usuario *aux = malloc(sizeof(usuario));
+    fseek(arq, sizeof(cabecalho) + pos * sizeof(usuario), SEEK_SET);
+    fread(aux, sizeof(usuario), 1, arq);
+    return aux;
+}
+
 void escreve_livro(FILE *arq, livro *novo, int pos)
 {
     fseek(arq, sizeof(cabecalho) + pos * sizeof(livro), SEEK_SET);
     fwrite(novo, sizeof(livro), 1, arq);
+}
+
+void escreve_usuario(FILE *arq, usuario *novo_user, int pos){
+    fseek(arq, sizeof(cabecalho) + pos * sizeof(usuario), SEEK_SET);
+    fwrite(novo_user, sizeof(usuario), 1, arq);
 }
 
 FILE *abrir_arquivo(const char *nome_arquivo)

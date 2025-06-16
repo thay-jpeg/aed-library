@@ -127,7 +127,43 @@ void imprimir_dados_livro(FILE *arq_livros)
 
 // void listar_livros(FILE *arq_livros) {}
 
-// void buscar_titulo(FILE *arq_livros) {}
+/*no* le_no(FILE* arq, int pos) {
+  no* x = malloc(sizeof(no));
+  fseek(arq,sizeof(cabecalho) + pos*sizeof(no),SEEK_SET);
+  fread(x,sizeof(no),1,arq);
+  return x;
+}*/
+
+void buscar_titulo(FILE *arq_livros) {
+    cabecalho *aux = le_cabecalho(arq_livros);
+    int pos_atual = aux->pos_cabeca;
+    char titulo_busca[MAX_TITULO];
+    int encontrado = 0;
+    printf("Digite o titulo do livro a ser buscado: ");
+    scanf(" %[^\n]%*c", titulo_busca);
+
+    while(titulo_busca != -1){
+        livro *livro_atual = le_livro(arq_livros, titulo_busca);
+        printf("codigo do livro: %d", livro_atual);
+
+        if(strcmp(livro_atual->titulo, titulo_busca) == 0){
+            //se encontrou impreme
+            if(!encontrado){
+                printf("\n--- Livro(s) Encontrado(s) ---\n");
+            }
+            printf("Codigo: %d | Autor: %s | Exemplares: %d\n", livro_atual->codigo,livro_atual->autor,livro_atual->exemplares);
+            encontrado = 1;
+        }
+        int proxima_pos = livro_atual->prox_pos;
+        free(livro_atual); 
+
+        pos_atual = proxima_pos;
+    }
+    
+
+    
+}
+
 
 void calcular_total(FILE *arq_livros)
 {

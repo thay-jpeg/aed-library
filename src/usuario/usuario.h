@@ -12,4 +12,7 @@
 //Cadastra um usuário
 void cadastrar_usuario(FILE *arq_usuarios);
 
+void inserir_Usuario_Cabeca(FILE *arq_usuarios, usuario UserParaInserir);
+
+
 #endif

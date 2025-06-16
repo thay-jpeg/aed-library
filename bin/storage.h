@@ -60,4 +60,6 @@ typedef struct
     long prox_pos;
 } emprestimo;
 
+//no_livro para usar na funcao buscar_livro
+
 #endif
