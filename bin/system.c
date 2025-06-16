@@ -55,7 +55,9 @@ void processar_sistema(database *db, int opcao)
         break;
     // case 3: listar_livros(db->arq_livros); break;
     // case 4: buscar_titulo(db->arq_livros); break;
-    // case 5: calcular_total(db->arq_livros); break;
+    case 5:
+        calcular_total(db->arq_livros);
+        break;
     // case 6: cadastrar_usuario(db->arq_usuarios); break;
     // case 7: emprestar_livro(db->arq_emprestimos); break;
     // case 8: devolver_livro(db->arq_emprestimos); break;
@@ -114,22 +116,17 @@ void escreve_livro(FILE *arq, livro *novo, int pos)
 
 FILE *abrir_arquivo(const char *nome_arquivo)
 {
+    FILE *arq = fopen(nome_arquivo, "wb+");
 
-    FILE *arq = fopen(nome_arquivo, "rb+");
-
-    // Verifica se o arquivo é nulo
     if (!arq)
     {
-        arq = fopen(nome_arquivo, "wb+");
-        if (!arq)
-        {
-            printf("ERRO CRITICO: Nao foi possivel criar o arquivo de dados.\n");
-            return NULL;
-        }
-        printf("Arquivo '%s' nao encontrado. Criando um novo...\n", nome_arquivo);
-
-        cria_lista_vazia(arq);
+        printf("ERRO CRITICO: Nao foi possivel criar o arquivo de dados.\n");
+        return NULL;
     }
+    printf("Arquivo '%s' nao encontrado. Criando um novo...\n", nome_arquivo);
+
+    cria_lista_vazia(arq);
+
     return arq;
 }
 

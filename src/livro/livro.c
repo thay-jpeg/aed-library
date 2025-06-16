@@ -103,7 +103,7 @@ void imprimir_dados_livro(FILE *arq_livros)
     }
 
     // quer dizer que encontrou o codigo na lista
-    if (pos != -1)
+    if (flag == 1)
     {
         printf("\n=========== Livro ===========\n");
         printf("Codigo : %d\n", aux->codigo);
@@ -129,6 +129,36 @@ void imprimir_dados_livro(FILE *arq_livros)
 
 // void buscar_titulo(FILE *arq_livros) {}
 
-// void calcular_total(FILE *arq_livros) {}
+void calcular_total(FILE *arq_livros)
+{
+
+    cabecalho *cab = le_cabecalho(arq_livros);
+
+    int temp = 0;
+    int total_topo = cab->pos_topo;
+    int livre_atual = cab->pos_livre;
+    livro aux;
+
+    while (livre_atual != -1)
+    {
+
+        if (busca_livro(arq_livros, livre_atual, &aux))
+        {
+            temp++;
+            livre_atual = aux.prox_pos;
+        }
+        else
+        {
+            printf("ERRO: Nao foi possivel acessar o arquivo de dados...\n");
+            livre_atual = -1;
+        }
+    }
+
+    printf("\n===================================\n");
+    printf("    Total de livros cadastrados: %d   ", total_topo - temp);
+    printf("\n===================================\n");
+
+    free(cab);
+}
 
 // void carregar_lote(FILE *arq_livros) {}

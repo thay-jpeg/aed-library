@@ -16,9 +16,9 @@
 // Cabeçalho do arquivo
 typedef struct
 {
-    long pos_cabeca;
-    long pos_topo;
-    long pos_livre;
+    int pos_cabeca;
+    int pos_topo;
+    int pos_livre;
 } cabecalho;
 
 // Banco de dados
