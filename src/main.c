@@ -1,16 +1,18 @@
-//Arquivo principal
+// Arquivo principal
 
 #include <stdio.h>
 #include "../bin/system.h"
 
-int main() {
+int main()
+{
     database db;
 
-    if(!abrir_database(&db)) {
+    if (!abrir_database(&db))
+    {
         printf("ERRO CRITICO: Nao foi possivel iniciar os arquivos de dados.\n");
         return 1;
     }
-    
+
     printf("\nSistema de biblioteca iniciado com sucesso.\n");
 
     iniciar_sistema(&db);
