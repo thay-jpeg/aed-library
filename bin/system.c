@@ -54,11 +54,11 @@ void processar_sistema(database *db, int opcao)
         imprimir_dados_livro(db->arq_livros);
         break;
     // case 3: listar_livros(db->arq_livros); break;
-    // case 4: buscar_titulo(db->arq_livros); break;
+    case 4: buscar_titulo(db->arq_livros); break;
     case 5:
         calcular_total(db->arq_livros);
         break;
-    // case 6: cadastrar_usuario(db->arq_usuarios); break;
+    case 6: cadastrar_usuario(db->arq_usuarios); break;
     // case 7: emprestar_livro(db->arq_emprestimos); break;
     // case 8: devolver_livro(db->arq_emprestimos); break;
     // case 9: listar_emprestimos(db->arq_emprestimos); break;

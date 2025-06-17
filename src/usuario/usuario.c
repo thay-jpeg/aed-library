@@ -1,20 +1,26 @@
 //Implementação
 
 #include "usuario.h"
+#include "../../bin/system.h"
 #include <stdio.h>
+#include <stdlib.h> 
 
 void cadastrar_usuario(FILE *arq_usuarios) {
     usuario NovoUser;
-    
-    printf("Codigo: ");
-    scanf("%d", NovoUser.codigo);
-    printf("\nNome: ");
-    scanf("%[^\n]%*c ",NovoUser.nome);
+    printf("\n=========== Cadastro de Usuario ===========\n");
+    printf("\nDigite o codigo do usuario: ");
+    scanf("%d%*c", &NovoUser.codigo);
+    printf("Digite o nome do usuario (MAX. 50 carac.): ");
+    scanf(" %50[^\n]%*c",NovoUser.nome);
+
+    printf("\n===========================================\n");
 
     inserir_Usuario_Cabeca(arq_usuarios,NovoUser);
+    printf("\nUsuario cadastrado com sucesso...\n");
 }
 
 void inserir_Usuario_Cabeca(FILE *arq_usuarios, usuario UserParaInserir){
+    
     cabecalho *cab = le_cabecalho(arq_usuarios);
     UserParaInserir.prox_pos = cab->pos_cabeca;
     if (cab->pos_livre == -1){

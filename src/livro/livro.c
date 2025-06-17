@@ -127,41 +127,50 @@ void imprimir_dados_livro(FILE *arq_livros)
 
 // void listar_livros(FILE *arq_livros) {}
 
-/*no* le_no(FILE* arq, int pos) {
-  no* x = malloc(sizeof(no));
-  fseek(arq,sizeof(cabecalho) + pos*sizeof(no),SEEK_SET);
-  fread(x,sizeof(no),1,arq);
-  return x;
-}*/
 
 void buscar_titulo(FILE *arq_livros) {
+
     cabecalho *aux = le_cabecalho(arq_livros);
-    int pos_atual = aux->pos_cabeca;
-    char titulo_busca[MAX_TITULO];
-    int encontrado = 0;
+    int pos_atual = aux->pos_cabeca; // posicao inicial para a busca
+
+    char titulo_busca[MAX_TITULO]; 
+    int encontrado = 0; // flag para verificar se pelo menos um livro foi encontrado
+
     printf("Digite o titulo do livro a ser buscado: ");
     scanf(" %[^\n]%*c", titulo_busca);
-
-    while(titulo_busca != -1){
-        livro *livro_atual = le_livro(arq_livros, titulo_busca);
-        printf("codigo do livro: %d", livro_atual);
-
+    while(pos_atual != -1){
+        livro *livro_atual = le_livro(arq_livros, pos_atual);
+        // compara o título do livro lido com o titulo buscado pelo usuario
         if(strcmp(livro_atual->titulo, titulo_busca) == 0){
-            //se encontrou impreme
+            // se os títulos forem iguais, o livro foi encontrado
+            // imprime um cabeçalho apenas na primeira vez que um livro eh encontrado
             if(!encontrado){
-                printf("\n--- Livro(s) Encontrado(s) ---\n");
+            printf("\n======== Livro(s) Encontrado(s) =========\n");
+                encontrado = 1; //atualiza a flag
             }
-            printf("Codigo: %d | Autor: %s | Exemplares: %d\n", livro_atual->codigo,livro_atual->autor,livro_atual->exemplares);
-            encontrado = 1;
+            printf("=========================================\n");
+            printf("Codigo: %d\n", livro_atual->codigo);
+            printf("Titulo: %s\n", livro_atual->titulo);
+            printf("Autor: %s\n", livro_atual->autor);
+            printf("Editora: %s\n", livro_atual->editora);
+            printf("Edicao: %d\n", livro_atual->edicao);
+            printf("Ano: %d\n", livro_atual->ano);
+            printf("Exemplares: %d\n", livro_atual->exemplares);
+            printf("=========================================\n");
         }
+        // guarda a posição do proximo livro na lista
         int proxima_pos = livro_atual->prox_pos;
-        free(livro_atual); 
 
+        free(livro_atual);
+
+        // atualiza a posição atual para continuar 
         pos_atual = proxima_pos;
     }
-    
+    if (!encontrado) {
+        printf("\nNenhum livro com o titulo '%s' foi encontrado.\n", titulo_busca);
+    }
 
-    
+    free(aux);
 }
 
 
