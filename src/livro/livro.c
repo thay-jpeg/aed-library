@@ -125,7 +125,31 @@ void imprimir_dados_livro(FILE *arq_livros)
     free(c);
 }
 
-// void listar_livros(FILE *arq_livros) {}
+void listar_livros(FILE *arq_livros) {
+    cabecalho *aux = le_cabecalho(arq_livros);
+    int i = aux->pos_cabeca;
+    if (i == -1) {
+        printf("\nNenhum livro foi cadastrados...\n");
+    } else {
+        printf("\n===================== LISTA DE LIVROS =====================\n");
+        printf("%s | %s | %s | %s\n", "Cod", "Titulo", "Autor", "Exemplares");
+        printf("===========================================================\n");
+
+        while (i != -1) {
+            livro *livro_atual = le_livro(arq_livros, i);
+            if (livro_atual) {
+                printf("%d | %s | %s | %d\n", livro_atual->codigo,livro_atual->titulo, livro_atual->autor, livro_atual->exemplares);
+                i = livro_atual->prox_pos;
+                free(livro_atual);
+            } else {
+                printf("\nFalha ao ler registro de livro na posicao %d\n", i);
+                i = -1; 
+            }
+        }
+        printf("===========================================================\n");
+    }
+    free(aux);
+}
 
 
 void buscar_titulo(FILE *arq_livros) {

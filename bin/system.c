@@ -53,7 +53,7 @@ void processar_sistema(database *db, int opcao)
     case 2:
         imprimir_dados_livro(db->arq_livros);
         break;
-    // case 3: listar_livros(db->arq_livros); break;
+    case 3: listar_livros(db->arq_livros); break;
     case 4: buscar_titulo(db->arq_livros); break;
     case 5:
         calcular_total(db->arq_livros);
