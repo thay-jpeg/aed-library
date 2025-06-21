@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 //Faz o empréstimo de um livro
-void emprestar_livro(FILE *arq_emprestimos);
+void emprestar_livro(FILE *arq_livros, FILE *arq_usuarios, FILE *arq_emprestimos);
 
 //Faz a devolução de um livro
 void devolver_livro(FILE *arq_emprestimos);

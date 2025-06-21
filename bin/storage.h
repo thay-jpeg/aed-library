@@ -9,7 +9,7 @@
 
 #define MAX_NOME 51
 #define MAX_EDITORA 51
-#define MAX_DATA 11
+#define MAX_DATA 12
 #define MAX_TITULO 151
 #define MAX_AUTOR 201
 

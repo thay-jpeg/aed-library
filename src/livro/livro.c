@@ -230,4 +230,38 @@ void calcular_total(FILE *arq_livros)
     free(cab);
 }
 
+
+/*Propósito: Busca um livro no arquivo binário pelo seu código e retorna a sua posição (índice) no arquivo.
+
+Pré-condições:
+    - O ponteiro 'arq_livros' deve ser válido e o arquivo deve estar aberto em modo que permita leitura (ex: "r+b").
+    - O arquivo deve ter um cabeçalho formatado corretamente na primeira posição. 
+
+Pós-condições (Retorno):
+    - Retorna a posição (um inteiro >= 0) do livro no arquivo se ele for encontrado.
+    - Retorna -1 se o livro com o código especificado não for encontrado na lista ou se ocorrer um erro de leitura.*/
+int buscar_pos_livro(FILE *arq_livros, int codigo) {
+    cabecalho *c = le_cabecalho(arq_livros);
+    if (!c) return -1;
+
+    int pos_atual = c->pos_cabeca;
+    free(c);
+
+    while (pos_atual != -1) {
+        livro *livro_atual = le_livro(arq_livros, pos_atual);
+        if (livro_atual) {
+            if (livro_atual->codigo == codigo) {
+                free(livro_atual);
+                return pos_atual; // Retorna a posição se encontrou
+            }
+            int proxima_pos = livro_atual->prox_pos;
+            free(livro_atual);
+            pos_atual = proxima_pos;
+        } else {
+            pos_atual = -1; // Sai do loop em caso de erro
+        }
+    }
+    return -1; // Retorna -1 se não encontrou
+}
+
 // void carregar_lote(FILE *arq_livros) {}
