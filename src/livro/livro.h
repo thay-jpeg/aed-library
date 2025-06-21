@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 
 // Cadastra um livro
 void cadastrar_livro(FILE *arq_livros);
@@ -25,7 +26,7 @@ void buscar_titulo(FILE *arq_livros);
 void calcular_total(FILE *arq_livros);
 
 // Carrega um arquivo em lote de livros
-void carregar_lote(FILE *arq_livros);
+void carregar_lote(database *db);
 
 int buscar_pos_livro(FILE *arq_livros, int codigo);
 

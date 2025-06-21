@@ -2,7 +2,11 @@
 
 #include "livro.h"
 #include "../../bin/system.h"
+#include "../usuario/usuario.h"
 #include <stdio.h>
+
+#define MAX_FILE 260
+#define MAX_BUFFER 1024
 
 static void insere_livro_cabeca(FILE *arq, livro novo)
 {
@@ -33,7 +37,7 @@ void cadastrar_livro(FILE *arq_livros)
 
     livro novo_livro;
 
-    printf("\n===== Cadastro de novo livro =====\n");
+    printf("\n================== Cadastro de novo livro =================\n");
     printf("Digite as credenciais a seguir:\n");
     printf("Codigo: ");
     scanf("%d%*c", &novo_livro.codigo);
@@ -49,11 +53,10 @@ void cadastrar_livro(FILE *arq_livros)
     scanf("%d%*c", &novo_livro.ano);
     printf("Quantidade de exemplares: ");
     scanf("%d%*c", &novo_livro.exemplares);
-    printf("====================================\n");
-
+    printf("\n===========================================================\n");
     insere_livro_cabeca(arq_livros, novo_livro);
 
-    printf("\n Livro cadastrado com sucesso!\n");
+    printf("\nLivro cadastrado com sucesso!\n");
 }
 
 static int busca_livro(FILE *arq, int pos, livro *destino)
@@ -105,45 +108,54 @@ void imprimir_dados_livro(FILE *arq_livros)
     // quer dizer que encontrou o codigo na lista
     if (flag == 1)
     {
-        printf("\n=========== Livro ===========\n");
-        printf("Codigo : %d\n", aux->codigo);
+        printf("\n=========================== Livro =========================\n");
+        printf("Codigo: %03d\n", aux->codigo);
         printf("Titulo: %s\n", aux->titulo);
         printf("Autor: %s\n", aux->autor);
         printf("Editora: %s\n", aux->editora);
         printf("Numero da edicao: %d\n", aux->edicao);
         printf("Ano: %d\n", aux->ano);
         printf("Quantidade de exemplares: %d", aux->exemplares);
-        printf("\n=============================\n");
+        printf("\n===========================================================\n");
+
     }
 
     // chegou ao final da lista e nao encontrou
     else
     {
-        printf("\n--> Sentimos muito, o livro com codigo '%d' nao existe em nosso historico ou nao foi encontrado... <--\n", codigo);
+        printf("\n--> Sentimos muito, o livro com codigo '%03d' nao existe em nosso historico ou nao foi encontrado... <--\n", codigo);
     }
     free(aux);
     free(c);
 }
 
-void listar_livros(FILE *arq_livros) {
+void listar_livros(FILE *arq_livros)
+{
     cabecalho *aux = le_cabecalho(arq_livros);
     int i = aux->pos_cabeca;
-    if (i == -1) {
-        printf("\nNenhum livro foi cadastrados...\n");
-    } else {
-        printf("\n===================== LISTA DE LIVROS =====================\n");
+    if (i == -1)
+    {
+        printf("\nNenhum livro foi cadastrado...\n");
+    }
+    else
+    {   
+        printf("\n===================== Lista de Livros =====================\n");
         printf("%s | %s | %s | %s\n", "Cod", "Titulo", "Autor", "Exemplares");
         printf("===========================================================\n");
 
-        while (i != -1) {
+        while (i != -1)
+        {
             livro *livro_atual = le_livro(arq_livros, i);
-            if (livro_atual) {
-                printf("%d | %s | %s | %d\n", livro_atual->codigo,livro_atual->titulo, livro_atual->autor, livro_atual->exemplares);
+            if (livro_atual)
+            {
+                printf("%03d | %s | %s | %d\n", livro_atual->codigo, livro_atual->titulo, livro_atual->autor, livro_atual->exemplares);
                 i = livro_atual->prox_pos;
                 free(livro_atual);
-            } else {
+            }
+            else
+            {
                 printf("\nFalha ao ler registro de livro na posicao %d\n", i);
-                i = -1; 
+                i = -1;
             }
         }
         printf("===========================================================\n");
@@ -151,52 +163,54 @@ void listar_livros(FILE *arq_livros) {
     free(aux);
 }
 
-
-void buscar_titulo(FILE *arq_livros) {
+void buscar_titulo(FILE *arq_livros)
+{
 
     cabecalho *aux = le_cabecalho(arq_livros);
     int pos_atual = aux->pos_cabeca; // posicao inicial para a busca
 
-    char titulo_busca[MAX_TITULO]; 
+    char titulo_busca[MAX_TITULO];
     int encontrado = 0; // flag para verificar se pelo menos um livro foi encontrado
 
-    printf("Digite o titulo do livro a ser buscado: ");
+    printf("\nDigite o titulo do livro a ser buscado: ");
     scanf(" %[^\n]%*c", titulo_busca);
-    while(pos_atual != -1){
+    while (pos_atual != -1)
+    {
         livro *livro_atual = le_livro(arq_livros, pos_atual);
         // compara o título do livro lido com o titulo buscado pelo usuario
-        if(strcmp(livro_atual->titulo, titulo_busca) == 0){
+        if (strcmp(livro_atual->titulo, titulo_busca) == 0)
+        {
             // se os títulos forem iguais, o livro foi encontrado
             // imprime um cabeçalho apenas na primeira vez que um livro eh encontrado
-            if(!encontrado){
-            printf("\n======== Livro(s) Encontrado(s) =========\n");
-                encontrado = 1; //atualiza a flag
+            if (!encontrado)
+            {   
+                printf("\n================== Livro(s) Encontrado(s) =================\n");
+                encontrado = 1; // atualiza a flag
             }
-            printf("=========================================\n");
-            printf("Codigo: %d\n", livro_atual->codigo);
+            printf("Codigo: %03d\n", livro_atual->codigo);
             printf("Titulo: %s\n", livro_atual->titulo);
             printf("Autor: %s\n", livro_atual->autor);
             printf("Editora: %s\n", livro_atual->editora);
             printf("Edicao: %d\n", livro_atual->edicao);
             printf("Ano: %d\n", livro_atual->ano);
             printf("Exemplares: %d\n", livro_atual->exemplares);
-            printf("=========================================\n");
+            printf("\n===========================================================\n");
         }
         // guarda a posição do proximo livro na lista
         int proxima_pos = livro_atual->prox_pos;
 
         free(livro_atual);
 
-        // atualiza a posição atual para continuar 
+        // atualiza a posição atual para continuar
         pos_atual = proxima_pos;
     }
-    if (!encontrado) {
+    if (!encontrado)
+    {
         printf("\nNenhum livro com o titulo '%s' foi encontrado.\n", titulo_busca);
     }
 
     free(aux);
 }
-
 
 void calcular_total(FILE *arq_livros)
 {
@@ -222,11 +236,9 @@ void calcular_total(FILE *arq_livros)
             livre_atual = -1;
         }
     }
-
-    printf("\n===================================\n");
-    printf("    Total de livros cadastrados: %d   ", total_topo - temp);
-    printf("\n===================================\n");
-
+    printf("\n===========================================================\n");
+    printf("                 Total de livros cadastrados: %d         ", total_topo - temp);
+    printf("\n===========================================================\n");
     free(cab);
 }
 
@@ -264,4 +276,137 @@ int buscar_pos_livro(FILE *arq_livros, int codigo) {
     return -1; // Retorna -1 se não encontrou
 }
 
-// void carregar_lote(FILE *arq_livros) {}
+static char *remove_espacos(char *token)
+{
+
+    char *final;
+
+    // se for um espaço, avança ->
+    while (isspace((unsigned char)*token))
+        token++;
+
+    // se for um token só de espaços, só retorna
+    if (*token == 0)
+        return token;
+
+    // vai para o final da string token
+    final = token + strlen(token) - 1;
+
+    // se o ponteiro ainda nao ter chegado no comeco da string e for um espaço, avança <-
+    while (final > token && isspace((unsigned char)*final))
+        final--;
+
+    // novo '\0'
+    *(final + 1) = '\0';
+
+    return token;
+}
+
+void carregar_lote(database *db)
+{
+
+    char nome_arquivo[MAX_FILE]; // 255 carac. + '.txt' + '\0'
+    char buffer[MAX_BUFFER];
+    FILE *arq_lote;
+    printf("\n============= Sistema de Carregamento em Lote =============\n\n");
+    printf("Bem-vindo(a), Usuario! Antes de prosseguirmos, para realizar o carregamento de seu arquivo com sucesso:\n");
+    printf("- O nome de seu arquivo texto deve ter, no maximo, 255 caracteres -\n\n");
+
+    printf("Digite o nome do seu arquivo de lote (ex: dados): ");
+    scanf("%255[^\n]%*c", nome_arquivo);
+    strcat(nome_arquivo, ".txt");
+
+    arq_lote = fopen(nome_arquivo, "r");
+
+    if (!arq_lote)
+    {
+        printf("ERRO CRITICO: Nao foi possivel abrir o arquivo de lote '%s'.\n", nome_arquivo);
+        return;
+    }
+
+    int count = 0;
+
+    while (fgets(buffer, sizeof(buffer), arq_lote))
+    {
+
+        // caso tiver, remover quebra de linha do buffer
+        buffer[strcspn(buffer, "\r\n")] = 0;
+        char *ptr_choose = buffer;
+
+        //se for um espaço, avança
+        while(*ptr_choose && isspace((unsigned char)*ptr_choose)) ptr_choose++; 
+        //se a linha for vazia, avança
+        if(*ptr_choose == '\0') continue;
+
+        char choose = *ptr_choose;
+        char *token;
+        
+        // leitura entre ;
+        token = strtok(buffer, ";");
+
+        // caso de linhas vazias
+        if (!token)
+            continue;
+
+        switch (choose)
+        {
+
+        case 'L':
+        {
+
+            livro novo;
+            // para guardar os ponteiros de cada parte do token
+            char *pieces[7];
+
+            for (int i = 0; i < 7; i++)
+            {
+                token = strtok(NULL, ";");
+                // se um dos tokens for nulo, preenche o array com string vazia
+                pieces[i] = token ? remove_espacos(token) : "";
+            }
+
+            novo.codigo = atoi(pieces[0]);
+            strcpy(novo.titulo, pieces[1]);
+            strcpy(novo.autor, pieces[2]);
+            strcpy(novo.editora, pieces[3]);
+            novo.edicao = atoi(pieces[4]);
+            novo.ano = atoi(pieces[5]);
+            novo.exemplares = atoi(pieces[6]);
+
+            insere_livro_cabeca(db->arq_livros, novo);
+            count++;
+            break;
+        }
+        case 'U':
+        {
+
+            usuario novo;
+            // para guardar os ponteiros de cada parte do token
+            char *pieces[2];
+
+            for (int i = 0; i < 2; i++)
+            {
+                token = strtok(NULL, ";");
+                // se um dos tokens for nulo, preenche o array com string vazia
+                pieces[i] = token ? remove_espacos(token) : "";
+            }
+
+            novo.codigo = atoi(pieces[0]);
+            strcpy(novo.nome, pieces[1]);
+
+            inserir_Usuario_Cabeca(db->arq_usuarios, novo);
+            count++;
+            break;
+        }
+        case 'E':
+            printf("\nAinda nao esta implementado.\n");
+            break;
+
+        default:
+            printf("AVISO: Linha com tipo de registro desconhecido ('%c'), linha ignorada.\n", choose);
+            break;
+        }
+    }
+    printf("\nCarregamento em lote concluido! %d registros processados.\n", count);
+    printf("\n===========================================================\n\n");
+}

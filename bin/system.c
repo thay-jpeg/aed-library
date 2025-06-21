@@ -5,10 +5,9 @@
 
 void exibir_menu()
 {
-
-    printf("\n================================================\n");
-    printf("      SISTEMA DE GERENCIAMENTO DA BIBLIOTECA     ");
-    printf("\n================================================\n\n");
+    printf("\n===========================================================\n");
+    printf("           SISTEMA DE GERENCIAMENTO DA BIBLIOTECA         ");
+    printf("\n===========================================================\n\n");
     printf("1- Cadastrar livro.\n");
     printf("2- Informacoes de um respectivo livro.\n");
     printf("3- Listar todos os livros cadastrados.\n");
@@ -20,7 +19,7 @@ void exibir_menu()
     printf("9- Listar todos os livros emprestados.\n");
     printf("10- Carregar arquivo em Lote.\n");
     printf("0- Sair\n");
-    printf("\n================================================\n\n");
+    printf("\n===========================================================\n");
 
     printf("Digite a opcao que deseja:\n");
 }
@@ -47,14 +46,11 @@ void processar_sistema(database *db, int opcao)
 {
     switch (opcao)
     {
-    case 1:
-        cadastrar_livro(db->arq_livros);
-        break;
-    case 2:
-        imprimir_dados_livro(db->arq_livros);
-        break;
+    case 1: cadastrar_livro(db->arq_livros); break;
+    case 2: imprimir_dados_livro(db->arq_livros); break;
     case 3: listar_livros(db->arq_livros); break;
     case 4: buscar_titulo(db->arq_livros); break;
+
     case 5:
         calcular_total(db->arq_livros);
         break;
@@ -66,12 +62,9 @@ void processar_sistema(database *db, int opcao)
         break;
     // case 8: devolver_livro(db->arq_emprestimos); break;
     // case 9: listar_emprestimos(db->arq_emprestimos); break;
-    // case 10: carregar_lote(db->arq_livros); break;
-    case 0:
-        break;
-    default:
-        printf("Opcao invalida. Tente novamente.\n");
-        break;
+    case 10: carregar_lote(db); break;
+    case 0: break;
+    default: printf("Opcao invalida. Tente novamente.\n"); break;
     }
 }
 
@@ -141,7 +134,7 @@ FILE *abrir_arquivo(const char *nome_arquivo)
         printf("ERRO CRITICO: Nao foi possivel criar o arquivo de dados.\n");
         return NULL;
     }
-    printf("Arquivo '%s' nao encontrado. Criando um novo...\n", nome_arquivo);
+    printf("Criando um novo arquivo '%s'...\n", nome_arquivo);
 
     cria_lista_vazia(arq);
 
@@ -150,7 +143,6 @@ FILE *abrir_arquivo(const char *nome_arquivo)
 
 int abrir_database(database *db)
 {
-
     db->arq_livros = abrir_arquivo("livros.bin");
     db->arq_emprestimos = abrir_arquivo("emprestimos.bin");
     db->arq_usuarios = abrir_arquivo("usuarios.bin");
@@ -163,7 +155,6 @@ int abrir_database(database *db)
 
 void fechar_database(database *db)
 {
-
     if (db->arq_livros)
         fclose(db->arq_livros);
     if (db->arq_emprestimos)
