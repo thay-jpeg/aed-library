@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+// Entrada: Ponteiro para o arquivo de usuarios.
+// Retorno: nenhum
+// Pré-condição: O ponteiro de arquivo deve ser valido e aberto em "r+b".
+// Pós-condição: Um novo usuario, com dados informados pelo console, eh inserido no arquivo.
 void cadastrar_usuario(FILE *arq_usuarios) {
     usuario NovoUser;
     printf("\n=========== Cadastro de Usuario ===========\n");
@@ -18,6 +23,10 @@ void cadastrar_usuario(FILE *arq_usuarios) {
     printf("\nUsuario cadastrado com sucesso...\n");
 }
 
+// Entrada: Ponteiro para o arquivo de usuários e uma struct 'usuario' com os dados.
+// Retorno: nenhum
+// Pré-condição: O ponteiro de arquivo deve ser valido e aberto em "r+b". A struct 'UserParaInserir' deve estar preenchida.
+// Pós-condição: O registro do usuário eh inserido no início da lista encadeada no arquivo, e o cabeçalho eh atualizado.
 void inserir_Usuario_Cabeca(FILE *arq_usuarios, usuario UserParaInserir){
     
     cabecalho *cab = le_cabecalho(arq_usuarios);

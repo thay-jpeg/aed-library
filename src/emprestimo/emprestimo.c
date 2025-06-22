@@ -7,26 +7,7 @@
 #include "../livro/livro.h"
 #include "../../bin/system.h"
 
-/*Propósito: Orquestra o processo completo de empréstimo de um livro.
-    A funçãosolicita os códigos do livro e do usuário, valida a existência e a
-    disponibilidade do livro, decrementa o estoque de exemplares e registra a
-    transação de empréstimo com a data atual do sistema
 
-Pré-condições:
-    - Os ponteiros de arquivo ('arq_livros', 'arq_usuarios', 'arq_emprestimos')devem ser
-    válidos e apontar para arquivos abertos em modo de leitura eescrita (ex: "r+b").
-    - O arquivo 'arq_livros' deve estar formatado com um cabeçalho válido.
-    - As funções auxiliares (buscar_pos_livro, le_livro, escreve_livro) devem estar implementadas e acessíveis.
-
-Pós-condições:
-    - Se o emprestimo for bem-sucedido:
-    - O número de exemplares do livro eh decrementado em 1 em 'arq_livros'
-    - Um novo registro de empréstimo eh adicionado ao final de 'arq_emprestimos' 
-    - Uma mensagem de sucesso eh exibida na tela
-    - Se o livro nao for encontrado ou não tiver exemplares:
-    - Nenhum arquivo eh modificado.
-    - Uma mensagem de erro apropriada é exibida na tela. 
- */
 void emprestar_livro(FILE *arq_livros, FILE *arq_usuarios, FILE *arq_emprestimos) {
    int codigo_livro, codigo_usuario;
     (void)arq_usuarios; // evita warning de parâmetro não usado por enquanto (se tirar da warning)
@@ -85,8 +66,19 @@ void emprestar_livro(FILE *arq_livros, FILE *arq_usuarios, FILE *arq_emprestimos
     free(livro_para_emprestar);      
 }
 
+// Entrada: Ponteiros para os arquivos de livros, usuários e emprestimos.
+// Retorno: nenhum
+// Pré-condição: Os ponteiros de arquivo devem ser válidos e abertos em "r+b".
+// Pós-condição: O registro do emprestimo eh atualizado com a data de devolução
+// e o estoque do livro eh incrementado, ou uma mensagem de erro eh exibida.
 //void devolver_livro(FILE *arq_emprestimos) {}
 
+
+// Entrada: Ponteiros para os arquivos de livros, usuários e emprestimos.
+// Retorno: nenhum
+// Pré-condição: Os ponteiros de arquivo devem ser vzlidos e abertos em "r+b".
+// Pós-condição: Uma lista de empréstimos ativos eh exibida na tela, com os
+//  nomes dos usuários e titulos dos livros. 
 void listar_emprestimos(FILE *arq_emprestimos) {
     
 }
