@@ -28,6 +28,7 @@ void calcular_total(FILE *arq_livros);
 // Carrega um arquivo em lote de livros
 void carregar_lote(database *db);
 
+// Busca a posição de um livro pelo seu código
 int buscar_pos_livro(FILE *arq_livros, int codigo);
 
 #endif

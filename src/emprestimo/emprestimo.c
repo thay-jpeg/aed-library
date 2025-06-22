@@ -6,6 +6,7 @@
 #include <string.h>
 #include "../livro/livro.h"
 #include "../usuario/usuario.h"
+#include "../usuario/usuario.h"
 #include "../../bin/system.h"
 
 /*Propósito: Orquestra o processo completo de empréstimo de um livro.
@@ -116,6 +117,7 @@ void registra_emprestimo(database *db, int codigo_livro, int codigo_usuario, cha
     printf("\n>>> Emprestimo realizado com sucesso! <<<\n");
     printf("Livro '%s' emprestado em %s.\n", livro_para_emprestar->titulo, novo_emprestimo.data_emprestimo);
 
+    free(livro_para_emprestar);
     free(livro_para_emprestar);
 }
 

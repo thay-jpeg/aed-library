@@ -9,6 +9,10 @@
 #define MAX_FILE 260
 #define MAX_BUFFER 1024
 
+// Entrada: Ponteiro para o arquivo de livros e uma struct 'livro' com os dados.
+// Retorno: nenhum
+// Pré-condição: O ponteiro de arquivo deve ser válido e aberto em "r+b",a struct 'novo' deve estar preenchida.
+// Pós-condição: O registro do livro é inserido no início da lista encadeada no arquivo, e o cabeçalho é atualizado.
 static void insere_livro_cabeca(FILE *arq, livro novo)
 {
 
@@ -33,6 +37,10 @@ static void insere_livro_cabeca(FILE *arq, livro novo)
     free(cab);
 }
 
+// Entrada: Ponteiro para o arquivo de livros.
+// Retorno: nenhum
+// Pré-condição: O ponteiro de arquivo deve ser válido e aberto em "r+b".
+// Pós-condição: Um novo livro, com dados informados pelo usuário, eh inserido no arquivo.
 void cadastrar_livro(FILE *arq_livros)
 {
 
@@ -60,6 +68,10 @@ void cadastrar_livro(FILE *arq_livros)
     printf("\nLivro cadastrado com sucesso!\n");
 }
 
+// Entrada: Ponteiro para o arquivo, a posição do registro e um ponteiro para uma struct 'livro' de destino.
+// Retorno: 1 se a leitura for bem-sucedida, 0 caso contrario.
+// Pré-condição: O ponteiro de arquivo deve ser válido. O ponteiro 'destino' deve apontar para uma área de memória alocada.
+// Pós-condição: A struct 'destino' é preenchida com os dados lidos da posição especificada no arquivo.
 static int busca_livro(FILE *arq, int pos, livro *destino)
 {
 
@@ -71,6 +83,11 @@ static int busca_livro(FILE *arq, int pos, livro *destino)
     return 0;
 }
 
+// Entrada: Ponteiro para o arquivo de livros.
+// Retorno: nenhum
+// Pré-condição:O ponteiro de arquivo deve ser valido e aberto em "r+b".
+// Pós-condição; As informações completas de um livro (buscado por código) sao exibidas na tela, 
+//  ou uma mensagem de erro se nao for encontrado.
 void imprimir_dados_livro(FILE *arq_livros)
 {
 
@@ -130,6 +147,11 @@ void imprimir_dados_livro(FILE *arq_livros)
     free(c);
 }
 
+// Entrada: Ponteiro para o arquivo de livros.
+// Retorno: nenhum
+// Pré-condição: O ponteiro de arquivo deve ser válido e aberto em "r+b".
+// Pós-condição: Uma lista formatada com código, título, autor e exemplares de todos os 
+//  livros eh exibida na tela.
 void listar_livros(FILE *arq_livros)
 {
     cabecalho *aux = le_cabecalho(arq_livros);
@@ -164,6 +186,11 @@ void listar_livros(FILE *arq_livros)
     free(aux);
 }
 
+
+// Entrada: Ponteiro para o arquivo de livros
+// Retorno: nenhum;
+// Pré-condição: O ponteiro de arquivo deve ser valido e aberto em "r+b".
+// Pós-condição: As informacoes completas de todos os livros que correspondem a um titulo sao exibidas na tela.
 void buscar_titulo(FILE *arq_livros)
 {
 
@@ -213,6 +240,10 @@ void buscar_titulo(FILE *arq_livros)
     free(aux);
 }
 
+// Entrada: Ponteiro para o arquivo de livros.
+// Retorno: nenhum
+// Pré-condição: O ponteiro de arquivo deve ser valido e aberto em "r+b".
+// Pós-condição: O numero total de livros cadastrados (excluindo os da lista de livres) eh exibido na tela.
 void calcular_total(FILE *arq_livros)
 {
 
@@ -243,16 +274,10 @@ void calcular_total(FILE *arq_livros)
     free(cab);
 }
 
-
-/*Propósito: Busca um livro no arquivo binário pelo seu código e retorna a sua posição (índice) no arquivo.
-
-Pré-condições:
-    - O ponteiro 'arq_livros' deve ser válido e o arquivo deve estar aberto em modo que permita leitura (ex: "r+b").
-    - O arquivo deve ter um cabeçalho formatado corretamente na primeira posição. 
-
-Pós-condições (Retorno):
-    - Retorna a posição (um inteiro >= 0) do livro no arquivo se ele for encontrado.
-    - Retorna -1 se o livro com o código especificado não for encontrado na lista ou se ocorrer um erro de leitura.*/
+// Entrada: Ponteiro para o arquivo de livros e o codigo a ser buscado.
+// Retorno: A posição (inteiro >= 0) do livro se encontrado, -1 caso contrario;
+// Pré-condição: O ponteiro de arquivo deve ser valido e aberto em "r+b".
+// Pós-condição: Nenhuma, a funcao nao modifica o arquivo.
 int buscar_pos_livro(FILE *arq_livros, int codigo) {
     cabecalho *c = le_cabecalho(arq_livros);
     if (!c) return -1;
@@ -277,6 +302,10 @@ int buscar_pos_livro(FILE *arq_livros, int codigo) {
     return -1; // Retorna 0 se não encontrou
 }
 
+// Entrada: Ponteiro para uma string (token).
+// Retorno: Ponteiro para o inicio da string sem espaços nas bordas.
+// Pré-condição: A entrada deve ser uma string C valida (terminada em nulo).
+// Pós-condição: A string original eh modificada no local, removendo espaços do inicio e do fim.
 static char *remove_espacos(char *token)
 {
 
@@ -303,6 +332,10 @@ static char *remove_espacos(char *token)
     return token;
 }
 
+// Entrada: Ponteiro para a struct 'database' com todos os arquivos abertos;
+// Retorno: nenhum
+// Pré-condição: O ponteiro 'db' e os ponteiros de arquivo dentro dele devem ser validos.
+// Pós-condição: Os dados do arquivo texto sao lidos e inseridos nos arquivos binarios correspondentes;
 void carregar_lote(database *db)
 {
 

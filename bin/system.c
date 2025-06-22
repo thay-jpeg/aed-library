@@ -3,6 +3,11 @@
 #include "system.h"
 #include <stdio.h>
 
+
+// Entrada: nenhuma
+// Retorno: nenhum
+// Pré-condição: nenhuma
+// Pós-condição: O menu principal com as opcoes do sistema eh exibido na tela.
 void exibir_menu()
 {
     printf("\n===========================================================\n");
@@ -24,6 +29,10 @@ void exibir_menu()
     printf("Digite a opcao que deseja:\n");
 }
 
+// Entrada: Ponteiro para a struct 'database' com os arquivos ja abertos.
+// Retorno: nenhum
+// Pré-condição: O ponteiro 'db' e os ponteiros de arquivo dentro dele devem ser validos.
+// Pós-condição: O menu eh exibido e as opcoees do usuario sao processadas em loop ate a escolha de sair (0).
 void iniciar_sistema(database *db)
 {
     int escolha;
@@ -40,7 +49,7 @@ void iniciar_sistema(database *db)
 // Entrada: Valor inteiro que representa a escolha do usuário no menu
 // Retorno: nenhum
 // Pré-condição: nenhuma
-// Pós-condição: A ação correspondente à opção será executada
+// Pós-condição: A acoes correspondente à opção será executada
 void processar_sistema(database *db, int opcao)
 {
     switch (opcao)
@@ -58,6 +67,7 @@ void processar_sistema(database *db, int opcao)
         break;
     case 7: 
         emprestar_livro(db);
+        emprestar_livro(db);
         break;
     case 8: devolver_livro(db); break;
     // case 9: listar_emprestimos(db->arq_emprestimos); break;
@@ -67,6 +77,10 @@ void processar_sistema(database *db, int opcao)
     }
 }
 
+// Entrada: Ponteiro para um arquivo e para a struct de cabeçalho com os novos dados.
+// Retorno: nenhum
+// Pré-condição: O ponteiro de arquivo deve ser válido e aberto em "r+b". O ponteiro 'cab' deve ser válido.
+// Pós-condição: O conteúdo da struct 'cab' é escrito no início do arquivo.
 void escreve_cabecalho(FILE *arq, cabecalho *cab)
 {
 
@@ -74,6 +88,11 @@ void escreve_cabecalho(FILE *arq, cabecalho *cab)
     fwrite(cab, sizeof(cabecalho), 1, arq);
 }
 
+// Entrada: Ponteiro para um arquivo.
+// Retorno: Ponteiro para uma struct 'cabecalho' alocada dinamicamente.
+// Pré-condição: O ponteiro de arquivo deve ser válido e aberto em modo de leitura.
+// Pós-condição: O cabeçalho é lido do arquivo e retornado, o chamador 
+//  da função eh responsável por liberar a memoria.
 cabecalho *le_cabecalho(FILE *arq)
 {
 
@@ -83,6 +102,10 @@ cabecalho *le_cabecalho(FILE *arq)
     return cab;
 }
 
+// Entrada: Ponteiro para um arquivo.
+// Retorno: nenhum
+// Pré-condição: O ponteiro de arquivo deve ser válido e aberto em modo de escrita.
+// Pós-condição: Um cabeçalho que representa uma lista vazia eh escrito no início do arquivo.
 void cria_lista_vazia(FILE *arq)
 {
 
@@ -95,6 +118,10 @@ void cria_lista_vazia(FILE *arq)
     free(cab);
 }
 
+// Entrada: Ponteiro para o arquivo e a posição (índice) do registro.
+// Retorno: Ponteiro para uma struct 'livro' alocada dinamicamente.
+// Pré-condição: O ponteiro de arquivo deve ser válido e 'pos' deve ser um índice existente.
+// Pós-condição: O registro do livro na posição especificada eh lido e retornado, o chamador é responsável por liberar a memória.
 livro *le_livro(FILE *arq, int pos)
 {
 
@@ -104,6 +131,10 @@ livro *le_livro(FILE *arq, int pos)
     return novo;
 }
 
+// Entrada: Ponteiro para o arquivo e a posição (índice) do registro.
+// Retorno: Ponteiro para uma struct 'usuario' alocada dinamicamente.
+// Pré-condição: O ponteiro de arquivo deve ser válido e 'pos' deve ser um índice existente.
+// Pós-condição: O registro do usuário na posição especificada é lido e retornado, o chamador eh responsavel por liberar a memória.
 usuario *le_usuario(FILE *arq, int pos)
 {
 
@@ -121,12 +152,28 @@ emprestimo *le_emprestimo(FILE *arq, int pos) {
     return novo;
 }
 
+emprestimo *le_emprestimo(FILE *arq, int pos) {
+
+    emprestimo *novo = malloc(sizeof(emprestimo));
+    fseek(arq, sizeof(cabecalho) + pos * sizeof(emprestimo), SEEK_SET);
+    fread(novo, sizeof(emprestimo), 1, arq);
+    return novo;
+}
+
+// Entrada: Ponteiro para o arquivo, ponteiro para a struct 'livro' e a posição (índice) para escrever.
+// Retorno: nenhum
+// Pré-condição: Os ponteiros devem ser válidos e 'pos' deve ser um índice existente.
+// Pós-condição: O conteúdo da struct 'livro' é escrito na posição especificada do arquivo.
 void escreve_livro(FILE *arq, livro *novo, int pos)
 {
     fseek(arq, sizeof(cabecalho) + pos * sizeof(livro), SEEK_SET);
     fwrite(novo, sizeof(livro), 1, arq);
 }
 
+// Entrada: Ponteiro para o arquivo, ponteiro para a struct 'usuario' e a posição (índice) para escrever.
+// Retorno: nenhum
+// Pré-condição: Os ponteiros devem ser válidos e 'pos' deve ser um índice existente.
+// Pós-condição: O conteúdo da struct 'usuario' eh escrito na posição especificada do arquivo.
 void escreve_usuario(FILE *arq, usuario *novo_user, int pos){
     fseek(arq, sizeof(cabecalho) + pos * sizeof(usuario), SEEK_SET);
     fwrite(novo_user, sizeof(usuario), 1, arq);
@@ -137,6 +184,15 @@ void escreve_emprestimo(FILE *arq, emprestimo *novo, int pos) {
     fwrite(novo, sizeof(emprestimo), 1, arq);
 }
 
+void escreve_emprestimo(FILE *arq, emprestimo *novo, int pos) {
+    fseek(arq,sizeof(cabecalho) + pos * sizeof(emprestimo), SEEK_SET);
+    fwrite(novo, sizeof(emprestimo), 1, arq);
+}
+
+// Entrada: String com o nome do arquivo a ser aberto.
+// Retorno: Ponteiro para o arquivo aberto (FILE*) ou NULL em caso de erro.
+// Pré-condição: nenhuma
+// Pós-condição: O arquivo eh criado (se não existir) com uma lista vazia e seu ponteiro eh retornado.
 FILE *abrir_arquivo(const char *nome_arquivo)
 {
     FILE *arq = fopen(nome_arquivo, "wb+");
@@ -153,6 +209,10 @@ FILE *abrir_arquivo(const char *nome_arquivo)
     return arq;
 }
 
+// Entrada: Ponteiro para a struct 'database'.
+// Retorno: 1 se todos os arquivos foram abertos com sucesso, 0 caso contrário.
+// Pré-condição: O ponteiro 'db' deve ser válido.
+// Pós-condição: Os ponteiros de arquivo dentro da struct 'db' são inicializados.
 int abrir_database(database *db)
 {
     db->arq_livros = abrir_arquivo("livros.bin");
@@ -165,6 +225,10 @@ int abrir_database(database *db)
     return 1;
 }
 
+// Entrada: Ponteiro para a struct 'database' com os arquivos abertos.
+// Retorno: nenhum
+// Pré-condição: Os ponteiros de arquivo dentro de 'db' são válidos ou NULL.
+// Pós-condição: Todos os arquivos abertos são fechados.
 void fechar_database(database *db)
 {
     if (db->arq_livros)

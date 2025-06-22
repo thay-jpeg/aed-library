@@ -16,6 +16,7 @@ void cadastrar_usuario(FILE *arq_usuarios);
 //Função auxiliar para cadastrar_usuario
 void inserir_Usuario_Cabeca(FILE *arq_usuarios, usuario UserParaInserir);
 
+//Verifica se um usuário existe a partir do seu código
 int buscar_pos_usuario(FILE *arq_usuarios, int codigo);
 
 #endif
