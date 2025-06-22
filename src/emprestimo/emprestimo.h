@@ -13,11 +13,13 @@
 void emprestar_livro(database *db);
 
 //Faz a devolução de um livro
-void devolver_livro(FILE *arq_emprestimos);
+void devolver_livro(database *db);
 
 //Lista todos os livros com empréstimo
 void listar_emprestimos(FILE *arq_emprestimos);
 
 void registra_emprestimo(database *db, int codigo_livro, int codigo_usuario, char* data_emprestimo, char *data_devolucao);
+
+int buscar_pos_emprestimo(FILE *arq_emprestimo, int codigo_livro, int codigo_usuario);
 
 #endif

@@ -274,7 +274,7 @@ int buscar_pos_livro(FILE *arq_livros, int codigo) {
             pos_atual = -1; // Sai do loop em caso de erro
         }
     }
-    return -1; // Retorna -1 se não encontrou
+    return -1; // Retorna 0 se não encontrou
 }
 
 static char *remove_espacos(char *token)

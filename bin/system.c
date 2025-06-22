@@ -26,7 +26,6 @@ void exibir_menu()
 
 void iniciar_sistema(database *db)
 {
-
     int escolha;
 
     do
@@ -60,7 +59,7 @@ void processar_sistema(database *db, int opcao)
     case 7: 
         emprestar_livro(db);
         break;
-    // case 8: devolver_livro(db->arq_emprestimos); break;
+    case 8: devolver_livro(db); break;
     // case 9: listar_emprestimos(db->arq_emprestimos); break;
     case 10: carregar_lote(db); break;
     case 0: break;
