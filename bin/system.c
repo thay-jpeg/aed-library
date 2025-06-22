@@ -67,7 +67,7 @@ void processar_sistema(database *db, int opcao)
         cadastrar_usuario(db->arq_usuarios); 
         break;
     case 7: 
-        emprestar_livro(db->arq_livros, db->arq_usuarios, db->arq_emprestimos);
+        emprestar_livro(db);
         break;
     // case 8: devolver_livro(db->arq_emprestimos); break;
     // case 9: listar_emprestimos(db->arq_emprestimos); break;
@@ -144,6 +144,14 @@ usuario *le_usuario(FILE *arq, int pos)
     return aux;
 }
 
+emprestimo *le_emprestimo(FILE *arq, int pos) {
+
+    emprestimo *novo = malloc(sizeof(emprestimo));
+    fseek(arq, sizeof(cabecalho) + pos * sizeof(emprestimo), SEEK_SET);
+    fread(novo, sizeof(emprestimo), 1, arq);
+    return novo;
+}
+
 // Entrada: Ponteiro para o arquivo, ponteiro para a struct 'livro' e a posição (índice) para escrever.
 // Retorno: nenhum
 // Pré-condição: Os ponteiros devem ser válidos e 'pos' deve ser um índice existente.
@@ -161,6 +169,11 @@ void escreve_livro(FILE *arq, livro *novo, int pos)
 void escreve_usuario(FILE *arq, usuario *novo_user, int pos){
     fseek(arq, sizeof(cabecalho) + pos * sizeof(usuario), SEEK_SET);
     fwrite(novo_user, sizeof(usuario), 1, arq);
+}
+
+void escreve_emprestimo(FILE *arq, emprestimo *novo, int pos) {
+    fseek(arq,sizeof(cabecalho) + pos * sizeof(emprestimo), SEEK_SET);
+    fwrite(novo, sizeof(emprestimo), 1, arq);
 }
 
 // Entrada: String com o nome do arquivo a ser aberto.

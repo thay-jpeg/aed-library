@@ -3,6 +3,7 @@
 #include "livro.h"
 #include "../../bin/system.h"
 #include "../usuario/usuario.h"
+#include "../emprestimo/emprestimo.h"
 #include <stdio.h>
 
 #define MAX_FILE 260
@@ -431,9 +432,27 @@ void carregar_lote(database *db)
             count++;
             break;
         }
-        case 'E':
-            printf("\nAinda nao esta implementado.\n");
+        case 'E': {
+
+            emprestimo novo;
+
+            char *pieces[4];
+
+            for(int i = 0; i < 4; i++) {
+                token = strtok(NULL, ";");
+                // se um dos tokens for nulo, preenche o array com string vazia
+                pieces[i] = token ? remove_espacos(token) : "";
+            }
+
+            novo.codigo_usuario = atoi(pieces[0]);
+            novo.codigo_livro = atoi(pieces[1]);
+            strcpy(novo.data_emprestimo, pieces[2]);
+            strcpy(novo.data_devolucao, pieces[3]);
+
+            registra_emprestimo(db, novo.codigo_livro, novo.codigo_usuario, novo.data_emprestimo, novo.data_devolucao);
+            count++;
             break;
+        }
 
         default:
             printf("AVISO: Linha com tipo de registro desconhecido ('%c'), linha ignorada.\n", choose);
