@@ -9,27 +9,11 @@
 #include "../usuario/usuario.h"
 #include "../../bin/system.h"
 
-/*Propósito: Orquestra o processo completo de empréstimo de um livro.
-    A funçãosolicita os códigos do livro e do usuário, valida a existência e a
-    disponibilidade do livro, decrementa o estoque de exemplares e registra a
-    transação de empréstimo com a data atual do sistema
 
-Pré-condições:
-    - Os ponteiros de arquivo ('arq_livros', 'arq_usuarios', 'arq_emprestimos')devem ser
-    válidos e apontar para arquivos abertos em modo de leitura eescrita (ex: "r+b").
-    - O arquivo 'arq_livros' deve estar formatado com um cabeçalho válido.
-    - As funções auxiliares (buscar_pos_livro, le_livro, escreve_livro) devem estar implementadas e acessíveis.
-
-Pós-condições:
-    - Se o emprestimo for bem-sucedido:
-    - O número de exemplares do livro eh decrementado em 1 em 'arq_livros'
-    - Um novo registro de empréstimo eh adicionado ao final de 'arq_emprestimos'
-    - Uma mensagem de sucesso eh exibida na tela
-    - Se o livro nao for encontrado ou não tiver exemplares:
-    - Nenhum arquivo eh modificado.
-    - Uma mensagem de erro apropriada é exibida na tela.
- */
-
+// Entrada: Ponteiro para o arquivo de empréstimos e uma struct 'emprestimo' com os dados.
+// Retorno: nenhum
+// Pré-condição: O ponteiro de arquivo deve ser valido e aberto em "r+b". A struct 'novo' deve estar preenchida.
+// Pós-condição: O registro do empréstimo eh inserido no início da lista encadeada no arquivo e o cabeçalho eh atualizado.
 static void insere_emprestimo_cabeca(FILE *arq, emprestimo novo)
 {
     cabecalho *cab = le_cabecalho(arq);
@@ -53,6 +37,10 @@ static void insere_emprestimo_cabeca(FILE *arq, emprestimo novo)
     free(cab);
 }
 
+// Entrada: Ponteiro para a 'database', códigos do livro e usuário, e strings para as datas.
+// Retorno: nenhum
+// Pré-condição: Ponteiro 'db' deve ser válido. As strings de data podem ser vazias.
+// Pós-condição: Valida e registra a transação de empréstimo, seja de forma interativa (data atual) ou em lote (data pré-definida).
 void registra_emprestimo(database *db, int codigo_livro, int codigo_usuario, char *data_emprestimo, char *data_devolucao)
 {
 
@@ -121,6 +109,10 @@ void registra_emprestimo(database *db, int codigo_livro, int codigo_usuario, cha
     free(livro_para_emprestar);
 }
 
+// Entrada: Ponteiro para a struct 'database'.
+// Retorno: nenhum
+// Pré-condição: O ponteiro 'db' deve ser valido e os arquivos dentro dele abertos.
+// Pós-condição: Solicita os códigos ao usuario e chama 'registra_emprestimo' para executar a logica do emprestimo.
 void emprestar_livro(database *db)
 {
 
@@ -135,7 +127,7 @@ void emprestar_livro(database *db)
 
     registra_emprestimo(db, codigo_livro, codigo_usuario, "", "");
 
-    printf("\n===========================================================\n");
+    printf("===========================================================\n");
 }
 
 int buscar_pos_emprestimo(FILE *arq_emprestimo, int codigo_livro, int codigo_usuario)
@@ -229,6 +221,10 @@ static void registra_devolucao(database *db, int codigo_livro, int codigo_usuari
     free(devolucao);
 }
 
+// Entrada: Ponteiro para a struct 'database'.
+// Retorno: nenhum
+// Pré-condição: O ponteiro 'db' e os arquivos dentro dele devem ser válidos e abertos.
+// Pós-condição: O registro do empréstimo eh atualizado com a data de devolução e o estoque do livro eh incrementado.
 void devolver_livro(database *db)
 {
 
@@ -243,7 +239,11 @@ void devolver_livro(database *db)
 
     registra_devolucao(db, codigo_livro, codigo_usuario);
 
-    printf("\n===========================================================\n");
+    printf("===========================================================\n");
 }
 
+// Entrada: Ponteiro para a struct 'database' contendo os arquivos de dados abertos.
+// Retorno: nenhum
+// Pré-condição: O ponteiro 'db' e os ponteiros de arquivo dentro dele devem ser válidos e os arquivos devem estar abertos.
+// Pós-condição: Uma lista formatada de todos os empréstimos ativos eh exibida na tela, incluindo dados do usuário e do livro. Nenhum arquivo eh modificado.
 // void listar_emprestimos(FILE *arq_emprestimos) {}

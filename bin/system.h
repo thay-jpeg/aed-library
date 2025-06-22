@@ -42,8 +42,6 @@ void escreve_usuario(FILE *arq, usuario *novo_user, int pos);
 
 void escreve_emprestimo(FILE *arq, emprestimo *novo, int pos);
 
-void escreve_emprestimo(FILE *arq, emprestimo *novo, int pos);
-
 // Inicia o sistema e gerencia escolhas do usuário
 void iniciar_sistema(database *db);
 
