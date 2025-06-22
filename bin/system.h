@@ -24,9 +24,13 @@ livro *le_livro(FILE *arq, int pos);
 
 usuario *le_usuario(FILE *arq, int pos);
 
+emprestimo *le_emprestimo(FILE *arq, int pos);
+
 void escreve_livro(FILE *arq, livro *novo, int pos);
 
 void escreve_usuario(FILE *arq, usuario *novo_user, int pos);
+
+void escreve_emprestimo(FILE *arq, emprestimo *novo, int pos);
 
 // Inicia o sistema e gerencia escolhas do usuário
 void iniciar_sistema(database *db);

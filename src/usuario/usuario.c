@@ -39,3 +39,26 @@ void inserir_Usuario_Cabeca(FILE *arq_usuarios, usuario UserParaInserir){
     free(cab);
 }
 
+int buscar_usuario(FILE *arq_usuarios, int codigo) {
+    cabecalho *c = le_cabecalho(arq_usuarios);
+    if (!c) return 0;
+
+    int pos_atual = c->pos_cabeca;
+    free(c);
+
+    while (pos_atual != -1) {
+        usuario *usuario_atual = le_usuario(arq_usuarios, pos_atual);
+        if (usuario_atual) {
+            if (usuario_atual->codigo == codigo) {
+                free(usuario_atual);
+                return 1;
+            }
+            int proxima_pos = usuario_atual->prox_pos;
+            free(usuario_atual);
+            pos_atual = proxima_pos;
+        } else {
+            pos_atual = -1; // sai do loop em caso de erro
+        }
+    }
+    return 0; // retorna -1 se não encontrou
+}
