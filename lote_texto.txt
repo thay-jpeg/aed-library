@@ -1,0 +1,130 @@
+L; 432; A Sombra do Vento; Carlos Ruiz Zafon;                                   Suma; 8; 2001; 12
+L; 112; O Labirinto dos Espiritos;   Javier Sierra; Planeta; 5; 2016; 7
+L; 87; A Rainha Vermelha; Victoria Aveyard;     Seguinte; 15; 2015; 20
+L;     255;   Fogo & Sangue; George R. R. Martin;   Suma; 4;   2018; 6
+L; 3;   O Homem de Giz; C. J. Tudor; Intrinseca; 9; 2018; 11
+L; 789;   A Garota no Gelo; Robert Bryndza;     Rocco; 12; 2016; 15
+        L; 501;   Anexos;   Rainbow Rowell;   Novo Seculo; 6;   2014; 8
+L;63;   O Sol na Cabeca; Geovani Martins; Companhia das Letras; 3; 2018; 5
+L; 999; O Conto da Aia; Margaret Atwood;    Rocco; 10; 1985; 14
+L;   22;   A Paciente Silenciosa;      Alex Michaelides; Record;   7; 2019; 10
+L; 140;   Pessoas Normais;   Sally Rooney;   Companhia das Letras; 5; 2018; 7
+L; 303; Hibisco Roxo;   Chimamanda Ngozi Adichie;   Companhia das Letras; 8; 2003; 11
+L; 55; E Assim que Acaba;   Colleen Hoover;  Galera Record; 20; 2016; 25
+L;     482; O Morro dos Ventos Uivantes;     Emily Bronte;   Martin Claret; 15; 1847; 22
+L;  19;   Mentirosos; E. Lockhart;   Seguinte; 11; 2014; 14
+L;  777;   A Biblioteca da Meia-Noite;    Matt Haig; Bertrand Brasil;   9; 2020; 13
+L;   8;   Um de Nos Esta Mentindo;      Karen M. McManus;   Galera Record;     13; 2017; 16
+L; 213;   O Odio que Voce Semeia;   Angie Thomas;   Galera Record; 6; 2017; 9
+L;      521;   A Cancao de Aquiles; Madeline Miller; Planeta; 8; 2011; 11
+L; 345;   Teto para Dois; Beth O'Leary;      Intrinseca; 10; 2019; 13
+L;   801; Circe; Madeline Miller;    Planeta; 7; 2018; 10
+L;   111;   A Vida Invisivel de Addie LaRue;   V. E. Schwab; Galera Record;     5; 2020; 8
+L; 92; Os Sete Maridos de Evelyn Hugo;   Taylor Jenkins Reid; Paralela; 18; 2017; 22
+L;   451; Fahrenheit 451; Ray Bradbury;    Globo; 12; 1953; 16
+   L; 237;   A Revolucao dos Bichos; George Orwell;   Companhia das Letras; 15; 1945; 20
+L;   666; It: A Coisa; Stephen King;   Suma; 4; 1986; 7
+L;   1; O Iluminado; Stephen King; Suma; 6; 1977; 9
+L;   18;   Psicose;   Robert Bloch;   Darkside; 8; 1959; 11
+L;  333;   O Exorcista; William Peter Blatty;   HarperCollins; 5; 1971; 8
+L;      7;   Dracula;   Bram Stoker;   Darkside; 10; 1897; 14
+L;   42; O Guia do Mochileiro das Galaxias; Douglas Adams;   Arqueiro; 20; 1979; 25
+L;   101;   Duna; Frank Herbert;   Aleph; 11; 1965; 15
+L;   505;   Fundacao; Isaac Asimov;   Aleph; 9; 1951; 13
+L;   207; Neuromancer; William Gibson; Aleph; 7; 1984; 10
+L;   68; Eu, Robo; Isaac Asimov;   Aleph; 12; 1950; 16
+L; 199;   Androides Sonham com Ovelhas Eletricas?; Philip K. Dick;   Aleph; 8; 1968; 12
+L;  314;   O Jogo do Exterminador;   Orson Scott Card;   Devir; 10; 1985; 14
+L;   72;   Solaris;   Stanislaw Lem;   Vide Editorial; 6; 1961; 9
+L;   88;   A Mao Esquerda da Escuridao; Ursula K. Le Guin;   Aleph; 7; 1969; 11
+L; 123;   O Problema dos Tres Corpos; Cixin Liu; Suma; 5; 2008; 8
+L; 246;   Flores para Algernon; Daniel Keyes; Aleph; 10; 1959; 14
+L;   357;   Contato;   Carl Sagan;   Companhia das Letras; 8; 1985; 12
+L;   468;   A Peste; Albert Camus;   Record; 9; 1947; 13
+L;  579;   O Estrangeiro; Albert Camus;   Record; 11; 1942; 15
+L;  690;   A Nausea;   Jean-Paul Sartre;   Nova Fronteira; 7; 1938; 10
+L;                                                                                                                              802; O Mito de Sisifo;   Albert Camus; Record; 8; 1942; 12
+L;913; Admiravel Mundo Novo; Aldous Huxley;   Globo; 14; 1932; 18
+                L; 585; O Mundo Secreto de Polegarzinha; Barbie       ; Mattel; 5; 2008; 15
+L;     174;    Barbie e as Tres Mosqueteiras; Barbie     ; Mattel; 8; 2009; 8
+       L;  84;   Corte de Espinhos e Rosas;   Sarah J. Maas   ; Amazon  ; 1; 2015;  60
+
+
+U; 101; Ricardo Mendes
+U;   23;   Beatriz Almeida
+U;   88;   Felipe Azevedo
+   U; 15;   Carolina Lima
+U; 42; Gustavo Pereira
+U;     99;   Isabela Rocha
+U; 7;   Leonardo Cardoso
+U; 333; Gabriela Ribeiro
+U; 50;  Lucas Nogueira
+U;   177;   Manuela Barros
+U; 2;   Rafael da Cunha
+U;   201; Clara Martins
+U; 66;   Bruno Farias
+U;   404;   Laura Gomes
+U; 1;   Thiago Castro
+
+
+
+E;   101;   432;   15/01/2025;   29/01/2025
+E;   23; 112; 18/01/2025;
+E;   88;87;   20/01/2025;   04/02/2025
+E; 15; 255; 22/01/2025;
+E;   42;3;   25/01/2025;   09/02/2025
+E; 99;   789; 28/01/2025;
+E; 7; 501;   01/02/2025;   15/02/2025
+E; 333;   63; 03/02/2025;
+E; 50; 999;   05/02/2025;   19/02/2025
+E;   177;22;   07/02/2025;
+E; 2; 140; 10/02/2025;   24/02/2025
+E;   201; 303; 12/02/2025;
+E;   66; 55;   14/02/2025;   28/02/2025
+E; 404; 482; 16/02/2025;
+E;   1;19;   18/02/2025;   04/03/2025
+E;   101;   777; 20/02/2025;
+E; 23; 8; 22/02/2025;   08/03/2025
+E;   88; 213; 24/02/2025;
+E; 15;   521; 26/02/2025;   12/03/2025
+E; 42; 345; 28/02/2025;
+E;   99;   801; 02/03/2025;   16/03/2025
+E; 7; 111; 04/03/2025;
+E;   333; 92; 06/03/2025;   20/03/2025
+E; 50; 451; 08/03/2025;
+E;   177; 237; 10/03/2025;   24/03/2025
+E; 2; 666; 12/03/2025;
+E; 201; 1; 14/03/2025;   28/03/2025
+E;   66; 18;   16/03/2025;
+E; 404;   333; 18/03/2025;   01/04/2025
+E; 1; 7; 20/03/2025;
+E;   101; 42;   22/03/2025;   05/04/2025
+E; 23; 101; 24/03/2025;
+E;   88;   505; 26/03/2025;   09/04/2025
+E; 15; 207; 28/03/2025;
+E;   42; 68;   30/03/2025;   13/04/2025
+E; 99;   199; 01/04/2025;
+E;   7;314;   03/04/2025;   17/04/2025
+E; 333; 72; 05/04/2025;
+E;   50; 88; 07/04/2025;   21/04/2025
+E; 177; 123; 09/04/2025;
+E;   2;   246; 11/04/2025;   25/04/2025
+E; 201; 357; 13/04/2025;
+E; 66;   468; 15/04/2025;   29/04/2025
+E;   404;   579; 17/04/2025;
+E; 1; 690; 19/04/2025;   03/05/2025
+E;   101; 802; 21/04/2025;
+E;   23; 913; 23/04/2025;   07/05/2025
+E; 88; 432; 25/04/2025;
+E; 15;   112; 27/04/2025;   11/05/2025
+E; 42; 87;   29/04/2025;
+E; 99;   255; 01/05/2025;   15/05/2025
+E;   7;   3;   03/05/2025;
+E; 333; 789; 05/05/2025;   19/05/2025
+E; 50; 501; 07/05/2025;
+E;   177;   63; 09/05/2025;   23/05/2025
+E; 2; 999; 11/05/2025;
+E;   201; 22; 13/05/2025;   27/05/2025
+E; 66;   140; 15/05/2025;
+E; 404; 303; 17/05/2025;   31/05/2025
+E;   1; 55; 19/05/2025;
