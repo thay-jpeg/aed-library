@@ -462,3 +462,24 @@ void carregar_lote(database *db)
     printf("\nCarregamento em lote concluido! %d registros processados.\n", count);
     printf("\n===========================================================\n\n");
 }
+
+// Entrada: Ponteiro para o arquivo de livros e o código do livro a ser buscado.
+// Retorno: Ponteiro para uma string (char*) alocada dinamicamente, contendo o
+// título do livro ou "Titulo Desconhecido". O chamador da função é responsável por liberar esta memória com free().
+// Pré-condição: O ponteiro de arquivo 'arq_livros' deve ser válido e o arquivo deve estar aberto em modo de leitura.
+// Pós-condição: Nenhuma. A função nao modifica o arquivo de livros.
+char* buscar_titulo_livro(FILE *arq_livros, int codigo) {
+    int pos = buscar_pos_livro(arq_livros, codigo);
+    if (pos != -1) {
+        livro *l = le_livro(arq_livros, pos);
+        if (l) {
+            char *titulo = malloc(strlen(l->titulo) + 1);
+            strcpy(titulo, l->titulo);
+            free(l);
+            return titulo;
+        }
+    }
+    char *nao_encontrado = malloc(strlen("Titulo Desconhecido") + 1);
+    strcpy(nao_encontrado, "Titulo Desconhecido");
+    return nao_encontrado;
+}

@@ -75,3 +75,34 @@ int buscar_usuario(FILE *arq_usuarios, int codigo) {
     }
     return 0; // retorna -1 se não encontrou
 }
+
+// Entrada: Ponteiro para o arquivo de usuários e o código a ser buscado.
+// Retorno: String (char*) com o nome do usuário. O chamador deve liberar a memória com free().
+// Pré-condição: Arquivo deve estar aberto em modo de leitura ("r+b").
+// Pós-condição: Nenhuma. A função é somente leitura.
+char* buscar_nome_usuario(FILE *arq_usuarios, int codigo) {
+    // Primeiro, verificamos se o usuário existe
+    if (!buscar_usuario(arq_usuarios, codigo)) {
+         char *nao_encontrado = malloc(strlen("Usuario Desconhecido") + 1);
+         strcpy(nao_encontrado, "Usuario Desconhecido");
+         return nao_encontrado;
+    }
+
+    // Se o usuário existe, leia o registro para pegar o nome
+    cabecalho *c = le_cabecalho(arq_usuarios);
+    int pos_atual = c->pos_cabeca;
+    free(c);
+
+    while(pos_atual != -1) {
+        usuario *u = le_usuario(arq_usuarios, pos_atual);
+        if (u->codigo == codigo) {
+            char *nome = malloc(strlen(u->nome) + 1);
+            strcpy(nome, u->nome);
+            free(u);
+            return nome;
+        }
+        pos_atual = u->prox_pos;
+        free(u);
+    }
+    return NULL; 
+}
