@@ -35,7 +35,6 @@ void exibir_menu()
 // Pós-condição: O menu eh exibido e as opcoees do usuario sao processadas em loop ate a escolha de sair (0).
 void iniciar_sistema(database *db)
 {
-
     int escolha;
 
     do
@@ -59,21 +58,14 @@ void processar_sistema(database *db, int opcao)
     case 2: imprimir_dados_livro(db->arq_livros); break;
     case 3: listar_livros(db->arq_livros); break;
     case 4: buscar_titulo(db->arq_livros); break;
-
-    case 5:
-        calcular_total(db->arq_livros);
-        break;
-    case 6: 
-        cadastrar_usuario(db->arq_usuarios); 
-        break;
-    case 7: 
-        emprestar_livro(db);
-        break;
-    // case 8: devolver_livro(db->arq_emprestimos); break;
+    case 5: calcular_total(db->arq_livros); break;
+    case 6: cadastrar_usuario(db->arq_usuarios); break;
+    case 7: emprestar_livro(db); break;
+    case 8: devolver_livro(db); break;
     // case 9: listar_emprestimos(db->arq_emprestimos); break;
     case 10: carregar_lote(db); break;
     case 0: break;
-    default: printf("Opcao invalida. Tente novamente.\n"); break;
+    default: printf("\nOpcao invalida. Tente novamente.\n"); break;
     }
 }
 
@@ -83,7 +75,6 @@ void processar_sistema(database *db, int opcao)
 // Pós-condição: O conteúdo da struct 'cab' é escrito no início do arquivo.
 void escreve_cabecalho(FILE *arq, cabecalho *cab)
 {
-
     fseek(arq, 0, SEEK_SET);
     fwrite(cab, sizeof(cabecalho), 1, arq);
 }
@@ -95,7 +86,6 @@ void escreve_cabecalho(FILE *arq, cabecalho *cab)
 //  da função eh responsável por liberar a memoria.
 cabecalho *le_cabecalho(FILE *arq)
 {
-
     cabecalho *cab = (cabecalho *)malloc(sizeof(cabecalho));
     fseek(arq, 0, SEEK_SET);
     fread(cab, sizeof(cabecalho), 1, arq);
@@ -108,7 +98,6 @@ cabecalho *le_cabecalho(FILE *arq)
 // Pós-condição: Um cabeçalho que representa uma lista vazia eh escrito no início do arquivo.
 void cria_lista_vazia(FILE *arq)
 {
-
     cabecalho *cab = (cabecalho *)malloc(sizeof(cabecalho));
     cab->pos_cabeca = -1;
     cab->pos_topo = 0;
@@ -124,7 +113,6 @@ void cria_lista_vazia(FILE *arq)
 // Pós-condição: O registro do livro na posição especificada eh lido e retornado, o chamador é responsável por liberar a memória.
 livro *le_livro(FILE *arq, int pos)
 {
-
     livro *novo = malloc(sizeof(livro));
     fseek(arq, sizeof(cabecalho) + pos * sizeof(livro), SEEK_SET);
     fread(novo, sizeof(livro), 1, arq);
@@ -137,15 +125,14 @@ livro *le_livro(FILE *arq, int pos)
 // Pós-condição: O registro do usuário na posição especificada é lido e retornado, o chamador eh responsavel por liberar a memória.
 usuario *le_usuario(FILE *arq, int pos)
 {
-
     usuario *aux = malloc(sizeof(usuario));
     fseek(arq, sizeof(cabecalho) + pos * sizeof(usuario), SEEK_SET);
     fread(aux, sizeof(usuario), 1, arq);
     return aux;
 }
 
-emprestimo *le_emprestimo(FILE *arq, int pos) {
-
+emprestimo *le_emprestimo(FILE *arq, int pos) 
+{
     emprestimo *novo = malloc(sizeof(emprestimo));
     fseek(arq, sizeof(cabecalho) + pos * sizeof(emprestimo), SEEK_SET);
     fread(novo, sizeof(emprestimo), 1, arq);
@@ -162,16 +149,14 @@ void escreve_livro(FILE *arq, livro *novo, int pos)
     fwrite(novo, sizeof(livro), 1, arq);
 }
 
-// Entrada: Ponteiro para o arquivo, ponteiro para a struct 'usuario' e a posição (índice) para escrever.
-// Retorno: nenhum
-// Pré-condição: Os ponteiros devem ser válidos e 'pos' deve ser um índice existente.
-// Pós-condição: O conteúdo da struct 'usuario' eh escrito na posição especificada do arquivo.
-void escreve_usuario(FILE *arq, usuario *novo_user, int pos){
+void escreve_usuario(FILE *arq, usuario *novo_user, int pos)
+{
     fseek(arq, sizeof(cabecalho) + pos * sizeof(usuario), SEEK_SET);
     fwrite(novo_user, sizeof(usuario), 1, arq);
 }
 
-void escreve_emprestimo(FILE *arq, emprestimo *novo, int pos) {
+void escreve_emprestimo(FILE *arq, emprestimo *novo, int pos) 
+{
     fseek(arq,sizeof(cabecalho) + pos * sizeof(emprestimo), SEEK_SET);
     fwrite(novo, sizeof(emprestimo), 1, arq);
 }

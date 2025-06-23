@@ -9,8 +9,9 @@
 #define MAX_FILE 260
 #define MAX_BUFFER 1024
 
+
 // Entrada: Ponteiro para o arquivo de livros e uma struct 'livro' com os dados.
-// Retorno: nenhum
+// Retorno: Nenhum
 // Pré-condição: O ponteiro de arquivo deve ser válido e aberto em "r+b",a struct 'novo' deve estar preenchida.
 // Pós-condição: O registro do livro é inserido no início da lista encadeada no arquivo, e o cabeçalho é atualizado.
 static void insere_livro_cabeca(FILE *arq, livro novo)
@@ -38,7 +39,7 @@ static void insere_livro_cabeca(FILE *arq, livro novo)
 }
 
 // Entrada: Ponteiro para o arquivo de livros.
-// Retorno: nenhum
+// Retorno: Nenhum
 // Pré-condição: O ponteiro de arquivo deve ser válido e aberto em "r+b".
 // Pós-condição: Um novo livro, com dados informados pelo usuário, eh inserido no arquivo.
 void cadastrar_livro(FILE *arq_livros)
@@ -47,7 +48,7 @@ void cadastrar_livro(FILE *arq_livros)
     livro novo_livro;
 
     printf("\n================== Cadastro de novo livro =================\n");
-    printf("Digite as credenciais a seguir:\n");
+    printf("\nDigite as credenciais a seguir:\n");
     printf("Codigo: ");
     scanf("%d%*c", &novo_livro.codigo);
     printf("Titulo (MAX. 150 carac.): ");
@@ -62,10 +63,10 @@ void cadastrar_livro(FILE *arq_livros)
     scanf("%d%*c", &novo_livro.ano);
     printf("Quantidade de exemplares: ");
     scanf("%d%*c", &novo_livro.exemplares);
-    printf("\n===========================================================\n");
-    insere_livro_cabeca(arq_livros, novo_livro);
-
     printf("\nLivro cadastrado com sucesso!\n");
+    insere_livro_cabeca(arq_livros, novo_livro);
+    
+    printf("\n===========================================================\n");
 }
 
 // Entrada: Ponteiro para o arquivo, a posição do registro e um ponteiro para uma struct 'livro' de destino.
@@ -84,10 +85,10 @@ static int busca_livro(FILE *arq, int pos, livro *destino)
 }
 
 // Entrada: Ponteiro para o arquivo de livros.
-// Retorno: nenhum
+// Retorno: Nenhum
 // Pré-condição:O ponteiro de arquivo deve ser valido e aberto em "r+b".
-// Pós-condição; As informações completas de um livro (buscado por código) sao exibidas na tela, 
-//  ou uma mensagem de erro se nao for encontrado.
+// Pós-condição: As informações completas de um livro (buscado por código) sao exibidas na tela, 
+// ou uma mensagem de erro se nao for encontrado.
 void imprimir_dados_livro(FILE *arq_livros)
 {
 
@@ -148,10 +149,9 @@ void imprimir_dados_livro(FILE *arq_livros)
 }
 
 // Entrada: Ponteiro para o arquivo de livros.
-// Retorno: nenhum
+// Retorno: Nenhum
 // Pré-condição: O ponteiro de arquivo deve ser válido e aberto em "r+b".
-// Pós-condição: Uma lista formatada com código, título, autor e exemplares de todos os 
-//  livros eh exibida na tela.
+// Pós-condição: Uma lista formatada com código, título, autor e exemplares de todos os livros eh exibida na tela.
 void listar_livros(FILE *arq_livros)
 {
     cabecalho *aux = le_cabecalho(arq_livros);
@@ -188,7 +188,7 @@ void listar_livros(FILE *arq_livros)
 
 
 // Entrada: Ponteiro para o arquivo de livros
-// Retorno: nenhum;
+// Retorno: Nenhum
 // Pré-condição: O ponteiro de arquivo deve ser valido e aberto em "r+b".
 // Pós-condição: As informacoes completas de todos os livros que correspondem a um titulo sao exibidas na tela.
 void buscar_titulo(FILE *arq_livros)
@@ -221,7 +221,7 @@ void buscar_titulo(FILE *arq_livros)
             printf("Editora: %s\n", livro_atual->editora);
             printf("Edicao: %d\n", livro_atual->edicao);
             printf("Ano: %d\n", livro_atual->ano);
-            printf("Exemplares: %d\n", livro_atual->exemplares);
+            printf("Exemplares: %d", livro_atual->exemplares);
             printf("\n===========================================================\n");
         }
         // guarda a posição do proximo livro na lista
@@ -241,7 +241,7 @@ void buscar_titulo(FILE *arq_livros)
 }
 
 // Entrada: Ponteiro para o arquivo de livros.
-// Retorno: nenhum
+// Retorno: Nenhum
 // Pré-condição: O ponteiro de arquivo deve ser valido e aberto em "r+b".
 // Pós-condição: O numero total de livros cadastrados (excluindo os da lista de livres) eh exibido na tela.
 void calcular_total(FILE *arq_livros)
@@ -269,7 +269,7 @@ void calcular_total(FILE *arq_livros)
         }
     }
     printf("\n===========================================================\n");
-    printf("                 Total de livros cadastrados: %d         ", total_topo - temp);
+    printf("               Total de livros cadastrados: %d         ", total_topo - temp);
     printf("\n===========================================================\n");
     free(cab);
 }
@@ -277,7 +277,7 @@ void calcular_total(FILE *arq_livros)
 // Entrada: Ponteiro para o arquivo de livros e o codigo a ser buscado.
 // Retorno: A posição (inteiro >= 0) do livro se encontrado, -1 caso contrario;
 // Pré-condição: O ponteiro de arquivo deve ser valido e aberto em "r+b".
-// Pós-condição: Nenhuma, a funcao nao modifica o arquivo.
+// Pós-condição: Nenhuma
 int buscar_pos_livro(FILE *arq_livros, int codigo) {
     cabecalho *c = le_cabecalho(arq_livros);
     if (!c) return -1;

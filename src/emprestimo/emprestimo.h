@@ -21,4 +21,6 @@ void listar_emprestimos(database *db);
 // Função auxiliar que valida e salva a transação de empréstimo
 void registra_emprestimo(database *db, int codigo_livro, int codigo_usuario, char* data_emprestimo, char *data_devolucao);
 
+int buscar_pos_emprestimo(FILE *arq_emprestimo, int codigo_livro, int codigo_usuario);
+
 #endif
