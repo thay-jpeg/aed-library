@@ -31,4 +31,7 @@ void carregar_lote(database *db);
 // Busca a posição de um livro pelo seu código
 int buscar_pos_livro(FILE *arq_livros, int codigo);
 
+// Busca e retorna o título de um livro a partir do seu código
+char* buscar_titulo_livro(FILE *arq_livros, int codigo);
+
 #endif

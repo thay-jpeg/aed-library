@@ -6,7 +6,6 @@
 #include <string.h>
 #include "../livro/livro.h"
 #include "../usuario/usuario.h"
-#include "../usuario/usuario.h"
 #include "../../bin/system.h"
 
 
@@ -130,6 +129,10 @@ void emprestar_livro(database *db)
     printf("===========================================================\n");
 }
 
+// Entrada: Ponteiro para o arquivo de empréstimos, código do livro e código do usuário.
+// Retorno: A posição (int >= 0) de um empréstimo ativo, ou -1 se não for encontrado.
+// Pré-condição: O ponteiro de arquivo deve ser válido e aberto em modo de leitura.
+// Pós-condição: Nenhuma. A função não modifica o arquivo.
 int buscar_pos_emprestimo(FILE *arq_emprestimo, int codigo_livro, int codigo_usuario)
 {
 
@@ -168,6 +171,11 @@ int buscar_pos_emprestimo(FILE *arq_emprestimo, int codigo_livro, int codigo_usu
     return -1; // Retorna -1 se não encontrou
 }
 
+// Entrada: Ponteiro para a 'database', código do livro e do usuário.
+// Retorno: nenhum
+// Pré-condição: Ponteiro 'db' deve ser válido e arquivos abertos.
+// Pós-condição: Valida e registra a transação de devolução, incrementando o estoque do 
+//  livro e atualizando o empréstimo com a data atual.
 static void registra_devolucao(database *db, int codigo_livro, int codigo_usuario)
 {
 
@@ -246,4 +254,51 @@ void devolver_livro(database *db)
 // Retorno: nenhum
 // Pré-condição: O ponteiro 'db' e os ponteiros de arquivo dentro dele devem ser válidos e os arquivos devem estar abertos.
 // Pós-condição: Uma lista formatada de todos os empréstimos ativos eh exibida na tela, incluindo dados do usuário e do livro. Nenhum arquivo eh modificado.
-// void listar_emprestimos(FILE *arq_emprestimos) {}
+void listar_emprestimos(database *db) {
+    cabecalho *cab_emp = le_cabecalho(db->arq_emprestimos);
+    if (!cab_emp) {
+        printf("ERRO: Nao foi possivel ler o arquivo de emprestimos.\n");
+        return;
+    }
+
+    int pos_atual = cab_emp->pos_cabeca;
+    int encontrou_ativos = 0;
+
+    printf("\n=========================== EMPRESTIMOS ATIVOS ===========================\n");
+    printf("%s | %s | %s | %s | %s\n", "Cod. User", "Nome do Usuario", "Cod. Livro", "Titulo do Livro", "Data Emprestimo");
+    printf("===========================================================================\n");
+
+    if (pos_atual == -1) {
+        printf("Nenhum emprestimo registrado no sistema.\n");
+    } else {
+        while (pos_atual != -1) {
+            emprestimo *emp = le_emprestimo(db->arq_emprestimos, pos_atual);
+
+            // Requisito: "apenas os ainda não devolvidos"
+            if (strcmp(emp->data_devolucao, "") == 0) {
+                if (!encontrou_ativos) {
+                    encontrou_ativos = 1;
+                }
+
+                // Busca os nomes correspondentes usando as funções auxiliares
+                char *nome_usuario = buscar_nome_usuario(db->arq_usuarios, emp->codigo_usuario);
+                char *titulo_livro = buscar_titulo_livro(db->arq_livros, emp->codigo_livro);
+
+                // Imprime a linha formatada com todos os dados pedidos q estavam no PDF
+                printf("%d | %s | %d | %s | %s\n",emp->codigo_usuario,nome_usuario,emp->codigo_livro,titulo_livro,emp->data_emprestimo);
+                
+                // Libera a memória alocada pelas funções auxiliares
+                free(nome_usuario);
+                free(titulo_livro);
+            }
+            pos_atual = emp->prox_pos;
+            free(emp); 
+        }
+    }
+    
+    if (!encontrou_ativos && cab_emp->pos_cabeca != -1) {
+        printf("Nenhum emprestimo ativo no momento.\n");
+    }
+    printf("===========================================================================\n");
+    free(cab_emp);
+}
