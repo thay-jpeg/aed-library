@@ -129,6 +129,10 @@ void emprestar_livro(database *db)
     printf("===========================================================\n");
 }
 
+// Entrada: Ponteiro para o arquivo de empréstimos, código do livro e código do usuário.
+// Retorno: A posição (int >= 0) de um empréstimo ativo, ou -1 se não for encontrado.
+// Pré-condição: O ponteiro de arquivo deve ser válido e aberto em modo de leitura.
+// Pós-condição: Nenhuma. A função não modifica o arquivo.
 int buscar_pos_emprestimo(FILE *arq_emprestimo, int codigo_livro, int codigo_usuario)
 {
 
@@ -167,6 +171,11 @@ int buscar_pos_emprestimo(FILE *arq_emprestimo, int codigo_livro, int codigo_usu
     return -1; // Retorna -1 se não encontrou
 }
 
+// Entrada: Ponteiro para a 'database', código do livro e do usuário.
+// Retorno: nenhum
+// Pré-condição: Ponteiro 'db' deve ser válido e arquivos abertos.
+// Pós-condição: Valida e registra a transação de devolução, incrementando o estoque do 
+//  livro e atualizando o empréstimo com a data atual.
 static void registra_devolucao(database *db, int codigo_livro, int codigo_usuario)
 {
 

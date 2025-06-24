@@ -131,6 +131,10 @@ usuario *le_usuario(FILE *arq, int pos)
     return aux;
 }
 
+// Entrada: Ponteiro para o arquivo e a posição (índice) do registro.
+// Retorno: Ponteiro para uma struct 'emprestimo' alocada dinamicamente.
+// Pré-condição: O ponteiro de arquivo deve ser válido e 'pos' deve ser um índice existente.
+// Pós-condição: O registro do empréstimo na posição especificada é lido e retornado. O chamador eh responsável por liberar a memória.
 emprestimo *le_emprestimo(FILE *arq, int pos) 
 {
     emprestimo *novo = malloc(sizeof(emprestimo));
@@ -149,12 +153,20 @@ void escreve_livro(FILE *arq, livro *novo, int pos)
     fwrite(novo, sizeof(livro), 1, arq);
 }
 
+// Entrada: Ponteiro para o arquivo, ponteiro para a struct 'usuario' e a posição (índice) para escrever.
+// Retorno: nenhum
+// Pré-condição: Os ponteiros devem ser válidos e 'pos' deve ser um índice existente.
+// Pós-condição: O conteúdo da struct 'usuario' é escrito na posição especificada do arquivo.
 void escreve_usuario(FILE *arq, usuario *novo_user, int pos)
 {
     fseek(arq, sizeof(cabecalho) + pos * sizeof(usuario), SEEK_SET);
     fwrite(novo_user, sizeof(usuario), 1, arq);
 }
 
+// Entrada: Ponteiro para o arquivo, ponteiro para a struct 'emprestimo' e a posição (índice) para escrever.
+// Retorno: nenhum
+// Pré-condição: Os ponteiros devem ser válidos e 'pos' deve ser um índice existente.
+// Pós-condição: O conteúdo da struct 'emprestimo' é escrito na posição especificada do arquivo.
 void escreve_emprestimo(FILE *arq, emprestimo *novo, int pos) 
 {
     fseek(arq,sizeof(cabecalho) + pos * sizeof(emprestimo), SEEK_SET);
