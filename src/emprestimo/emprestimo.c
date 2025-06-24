@@ -117,16 +117,16 @@ void emprestar_livro(database *db)
 
     int codigo_livro, codigo_usuario;
 
-    printf("\n===================== Emprestar Livro =====================\n");
+    printf("\n=================================== Emprestar Livro ==================================\n");
 
-    printf("Digite o codigo do livro: ");
-    scanf("%d%*c", &codigo_livro);
     printf("Digite o codigo do usuario: ");
     scanf("%d%*c", &codigo_usuario);
+    printf("Digite o codigo do livro: ");
+    scanf("%d%*c", &codigo_livro);
 
     registra_emprestimo(db, codigo_livro, codigo_usuario, "", "");
 
-    printf("===========================================================\n");
+    printf("======================================================================================\n");
 }
 
 // Entrada: Ponteiro para o arquivo de empréstimos, código do livro e código do usuário.
@@ -238,16 +238,16 @@ void devolver_livro(database *db)
 
     int codigo_livro, codigo_usuario;
 
-    printf("\n===================== Devolver Livro ======================\n");
+    printf("\n=================================== Devolver Livro ===================================\n");
 
-    printf("Digite o codigo do livro: ");
-    scanf("%d%*c", &codigo_livro);
     printf("Digite o codigo do usuario: ");
     scanf("%d%*c", &codigo_usuario);
+    printf("Digite o codigo do livro: ");
+    scanf("%d%*c", &codigo_livro);
 
     registra_devolucao(db, codigo_livro, codigo_usuario);
 
-    printf("===========================================================\n");
+    printf("======================================================================================\n");
 }
 
 // Entrada: Ponteiro para a struct 'database' contendo os arquivos de dados abertos.
@@ -264,12 +264,12 @@ void listar_emprestimos(database *db) {
     int pos_atual = cab_emp->pos_cabeca;
     int encontrou_ativos = 0;
 
-    printf("\n=========================== EMPRESTIMOS ATIVOS ===========================\n");
-    printf("%s | %s | %s | %s | %s\n", "Cod. User", "Nome do Usuario", "Cod. Livro", "Titulo do Livro", "Data Emprestimo");
-    printf("===========================================================================\n");
+    printf("\n================================= EMPRESTIMOS ATIVOS =================================\n");
+    printf("%s | %-20s | %-3s | %-30s | %s\n", "Cod", "Nome do Usuario", "Cod", "Titulo do Livro", "Data Emprestimo");
+    printf("======================================================================================\n");
 
     if (pos_atual == -1) {
-        printf("Nenhum emprestimo registrado no sistema.\n");
+        printf("\nNenhum emprestimo registrado no sistema.\n\n");
     } else {
         while (pos_atual != -1) {
             emprestimo *emp = le_emprestimo(db->arq_emprestimos, pos_atual);
@@ -284,8 +284,7 @@ void listar_emprestimos(database *db) {
                 char *nome_usuario = buscar_nome_usuario(db->arq_usuarios, emp->codigo_usuario);
                 char *titulo_livro = buscar_titulo_livro(db->arq_livros, emp->codigo_livro);
 
-                // Imprime a linha formatada com todos os dados pedidos q estavam no PDF
-                printf("%d | %s | %d | %s | %s\n",emp->codigo_usuario,nome_usuario,emp->codigo_livro,titulo_livro,emp->data_emprestimo);
+                printf("%03d | %-20s | %03d | %-30s | %s\n", emp->codigo_usuario, nome_usuario, emp->codigo_livro, titulo_livro, emp->data_emprestimo);
                 
                 // Libera a memória alocada pelas funções auxiliares
                 free(nome_usuario);
@@ -297,8 +296,9 @@ void listar_emprestimos(database *db) {
     }
     
     if (!encontrou_ativos && cab_emp->pos_cabeca != -1) {
-        printf("Nenhum emprestimo ativo no momento.\n");
+        printf("\nNenhum emprestimo ativo no momento.\n\n");
     }
-    printf("===========================================================================\n");
+    printf("======================================================================================\n");    
+
     free(cab_emp);
 }

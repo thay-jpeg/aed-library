@@ -10,9 +10,10 @@
 // Pós-condição: O menu principal com as opcoes do sistema eh exibido na tela.
 void exibir_menu()
 {
-    printf("\n===========================================================\n");
-    printf("           SISTEMA DE GERENCIAMENTO DA BIBLIOTECA         ");
-    printf("\n===========================================================\n\n");
+
+    printf("\n======================================================================================\n");
+    printf("                          SISTEMA DE GERENCIAMENTO DA BIBLIOTECA              ");
+    printf("\n======================================================================================\n\n");
     printf("1- Cadastrar livro.\n");
     printf("2- Informacoes de um respectivo livro.\n");
     printf("3- Listar todos os livros cadastrados.\n");
@@ -24,7 +25,8 @@ void exibir_menu()
     printf("9- Listar todos os livros emprestados.\n");
     printf("10- Carregar arquivo em Lote.\n");
     printf("0- Sair\n");
-    printf("\n===========================================================\n");
+    printf("\n======================================================================================\n");
+
 
     printf("Digite a opcao que deseja:\n");
 }
@@ -43,6 +45,10 @@ void iniciar_sistema(database *db)
         scanf("%d%*c", &escolha);
 
         processar_sistema(db, escolha);
+        printf("\n");
+        system("pause");
+        system("cls");
+
     } while (escolha != 0);
 }
 
@@ -62,7 +68,7 @@ void processar_sistema(database *db, int opcao)
     case 6: cadastrar_usuario(db->arq_usuarios); break;
     case 7: emprestar_livro(db); break;
     case 8: devolver_livro(db); break;
-    // case 9: listar_emprestimos(db->arq_emprestimos); break;
+    case 9: listar_emprestimos(db); break;
     case 10: carregar_lote(db); break;
     case 0: break;
     default: printf("\nOpcao invalida. Tente novamente.\n"); break;

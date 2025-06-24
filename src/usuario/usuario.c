@@ -12,7 +12,8 @@
 void cadastrar_usuario(FILE *arq_usuarios) {
     usuario NovoUser;
 
-    printf("\n=================== Cadastro de Usuario ===================\n");
+    printf("\n=============================== Cadastro de Usuario ==================================\n");
+
     printf("\nDigite o codigo do usuario: ");
     scanf("%d%*c", &NovoUser.codigo);
     printf("Digite o nome do usuario (MAX. 50 carac.): ");
@@ -22,7 +23,8 @@ void cadastrar_usuario(FILE *arq_usuarios) {
 
     printf("\nUsuario cadastrado com sucesso!\n");
 
-    printf("\n===========================================================\n");
+    printf("\n======================================================================================\n");
+
 }
 
 // Entrada: Ponteiro para o arquivo de usuários e uma struct 'usuario' com os dados.
