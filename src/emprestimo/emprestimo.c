@@ -6,7 +6,6 @@
 #include <string.h>
 #include "../livro/livro.h"
 #include "../usuario/usuario.h"
-#include "../usuario/usuario.h"
 #include "../../bin/system.h"
 
 
@@ -60,53 +59,65 @@ void registra_emprestimo(database *db, int codigo_livro, int codigo_usuario, cha
         return;
     }
 
-    if (buscar_pos_emprestimo(db->arq_emprestimos, codigo_livro, codigo_usuario) != -1)
-    {
-        printf("\nERRO: Este usuario ja possui um emprestimo ativo para este livro e nao pode empresta-lo novamente.\n");
-        return; // impede o novo empréstimo
-    }
+    usuario *usuario_para_emprestar = le_usuario(db->arq_usuarios, pos_usuario);
+    if(!usuario_para_emprestar) return;
 
     livro *livro_para_emprestar = le_livro(db->arq_livros, pos_livro);
-
-    if (livro_para_emprestar->exemplares <= 0)
-    {
-        printf("\nSentimos muito, mas nao ha exemplares do livro '%s' disponiveis para emprestimo.\n", livro_para_emprestar->titulo);
-        free(livro_para_emprestar);
-        return;
-    }
-
-    livro_para_emprestar->exemplares--;
-    escreve_livro(db->arq_livros, livro_para_emprestar, pos_livro);
+    if (!livro_para_emprestar) return;
 
     emprestimo novo_emprestimo;
     novo_emprestimo.codigo_livro = codigo_livro;
     novo_emprestimo.codigo_usuario = codigo_usuario;
 
-    if (strcmp(data_emprestimo, "") == 0)
-    {
-
-        // obtem a data atual do sistema, conforme requisito
-        time_t t = time(NULL);
-        struct tm tm = *localtime(&t);
-
-        // para formatar data
-        strftime(novo_emprestimo.data_emprestimo, sizeof(novo_emprestimo.data_emprestimo), "%d/%m/%Y", &tm);
-    }
-
-    else
-    {
-        strcpy(novo_emprestimo.data_emprestimo, data_emprestimo);
-    }
-
     strcpy(novo_emprestimo.data_devolucao, data_devolucao);
 
+    // para registros históricos, com emprestimo e devolucao cadastrados
+    if (strlen(novo_emprestimo.data_devolucao) > 0)
+    {
+        strcpy(novo_emprestimo.data_emprestimo, data_emprestimo);
+        printf("\nINFO: Registrando emprestimo historico (com devolucao) do livro '%s' para %s.\n", livro_para_emprestar->titulo, usuario_para_emprestar->nome);
+    }
+    
+    //se nao houver data de devolução, é um novo empréstimo
+    else {
+
+        if (buscar_pos_emprestimo(db->arq_emprestimos, codigo_livro, codigo_usuario) != -1)
+        {
+        printf("\nSentimos muito, mas o(a) %s ja possui um emprestimo ativo para este livro e nao podemos empresta-lo novamente.\n", usuario_para_emprestar->nome);
+        return; // impede o novo empréstimo
+        }
+
+        if (livro_para_emprestar->exemplares <= 0)
+        {
+        printf("\nSentimos muito, mas nao ha exemplares do livro '%s' disponiveis para emprestimo.\n", livro_para_emprestar->titulo);
+        free(livro_para_emprestar);
+        free(usuario_para_emprestar);
+        return;
+        }
+
+        livro_para_emprestar->exemplares--;
+        escreve_livro(db->arq_livros, livro_para_emprestar, pos_livro);
+        
+        if (strcmp(data_emprestimo, "") == 0)
+        {
+            
+            // obtem a data atual do sistema, conforme requisito
+            time_t t = time(NULL);
+            struct tm tm = *localtime(&t);
+            
+            // para formatar data
+            strftime(novo_emprestimo.data_emprestimo, sizeof(novo_emprestimo.data_emprestimo), "%d/%m/%Y", &tm);
+        }
+        
+        else strcpy(novo_emprestimo.data_emprestimo, data_emprestimo);
+     
+        printf("\n>>> Emprestimo realizado com sucesso! <<<\n");
+        printf("Livro '%s' emprestado em %s para %s.\n", livro_para_emprestar->titulo, novo_emprestimo.data_emprestimo, usuario_para_emprestar->nome);
+    }
+    
     insere_emprestimo_cabeca(db->arq_emprestimos, novo_emprestimo);
-
-    printf("\n>>> Emprestimo realizado com sucesso! <<<\n");
-    printf("Livro '%s' emprestado em %s.\n", livro_para_emprestar->titulo, novo_emprestimo.data_emprestimo);
-
     free(livro_para_emprestar);
-    free(livro_para_emprestar);
+    free(usuario_para_emprestar);
 }
 
 // Entrada: Ponteiro para a struct 'database'.
@@ -118,18 +129,22 @@ void emprestar_livro(database *db)
 
     int codigo_livro, codigo_usuario;
 
-    printf("\n===================== Emprestar Livro =====================\n");
+    printf("\n=================================== Emprestar Livro ==================================\n");
 
-    printf("Digite o codigo do livro: ");
-    scanf("%d%*c", &codigo_livro);
     printf("Digite o codigo do usuario: ");
     scanf("%d%*c", &codigo_usuario);
+    printf("Digite o codigo do livro: ");
+    scanf("%d%*c", &codigo_livro);
 
     registra_emprestimo(db, codigo_livro, codigo_usuario, "", "");
 
-    printf("===========================================================\n");
+    printf("======================================================================================\n");
 }
 
+// Entrada: Ponteiro para o arquivo de empréstimos, código do livro e código do usuário.
+// Retorno: A posição (int >= 0) de um empréstimo ativo, ou -1 se não for encontrado.
+// Pré-condição: O ponteiro de arquivo deve ser válido e aberto em modo de leitura.
+// Pós-condição: Nenhuma. A função não modifica o arquivo.
 int buscar_pos_emprestimo(FILE *arq_emprestimo, int codigo_livro, int codigo_usuario)
 {
 
@@ -168,6 +183,11 @@ int buscar_pos_emprestimo(FILE *arq_emprestimo, int codigo_livro, int codigo_usu
     return -1; // Retorna -1 se não encontrou
 }
 
+// Entrada: Ponteiro para a 'database', código do livro e do usuário.
+// Retorno: nenhum
+// Pré-condição: Ponteiro 'db' deve ser válido e arquivos abertos.
+// Pós-condição: Valida e registra a transação de devolução, incrementando o estoque do 
+//  livro e atualizando o empréstimo com a data atual.
 static void registra_devolucao(database *db, int codigo_livro, int codigo_usuario)
 {
 
@@ -230,20 +250,67 @@ void devolver_livro(database *db)
 
     int codigo_livro, codigo_usuario;
 
-    printf("\n===================== Devolver Livro ======================\n");
+    printf("\n=================================== Devolver Livro ===================================\n");
 
-    printf("Digite o codigo do livro: ");
-    scanf("%d%*c", &codigo_livro);
     printf("Digite o codigo do usuario: ");
     scanf("%d%*c", &codigo_usuario);
+    printf("Digite o codigo do livro: ");
+    scanf("%d%*c", &codigo_livro);
 
     registra_devolucao(db, codigo_livro, codigo_usuario);
 
-    printf("===========================================================\n");
+    printf("======================================================================================\n");
 }
 
 // Entrada: Ponteiro para a struct 'database' contendo os arquivos de dados abertos.
 // Retorno: nenhum
 // Pré-condição: O ponteiro 'db' e os ponteiros de arquivo dentro dele devem ser válidos e os arquivos devem estar abertos.
 // Pós-condição: Uma lista formatada de todos os empréstimos ativos eh exibida na tela, incluindo dados do usuário e do livro. Nenhum arquivo eh modificado.
-// void listar_emprestimos(FILE *arq_emprestimos) {}
+void listar_emprestimos(database *db) {
+    cabecalho *cab_emp = le_cabecalho(db->arq_emprestimos);
+    if (!cab_emp) {
+        printf("ERRO: Nao foi possivel ler o arquivo de emprestimos.\n");
+        return;
+    }
+
+    int pos_atual = cab_emp->pos_cabeca;
+    int encontrou_ativos = 0;
+
+    printf("\n================================= EMPRESTIMOS ATIVOS =================================\n");
+    printf("%s | %-20s | %-3s | %-30s | %s\n", "Cod", "Nome do Usuario", "Cod", "Titulo do Livro", "Data Emprestimo");
+    printf("======================================================================================\n");
+
+    if (pos_atual == -1) {
+        printf("\nNenhum emprestimo registrado no sistema.\n\n");
+    } else {
+        while (pos_atual != -1) {
+            emprestimo *emp = le_emprestimo(db->arq_emprestimos, pos_atual);
+
+            // Requisito: "apenas os ainda não devolvidos"
+            if (strcmp(emp->data_devolucao, "") == 0) {
+                if (!encontrou_ativos) {
+                    encontrou_ativos = 1;
+                }
+
+                // Busca os nomes correspondentes usando as funções auxiliares
+                char *nome_usuario = buscar_nome_usuario(db->arq_usuarios, emp->codigo_usuario);
+                char *titulo_livro = buscar_titulo_livro(db->arq_livros, emp->codigo_livro);
+
+                printf("%03d | %-20s | %03d | %-30s | %s\n", emp->codigo_usuario, nome_usuario, emp->codigo_livro, titulo_livro, emp->data_emprestimo);
+                
+                // Libera a memória alocada pelas funções auxiliares
+                free(nome_usuario);
+                free(titulo_livro);
+            }
+            pos_atual = emp->prox_pos;
+            free(emp); 
+        }
+    }
+    
+    if (!encontrou_ativos && cab_emp->pos_cabeca != -1) {
+        printf("\nNenhum emprestimo ativo no momento.\n\n");
+    }
+    printf("======================================================================================\n");    
+
+    free(cab_emp);
+}

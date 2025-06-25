@@ -6,6 +6,7 @@
 
 int main()
 {
+    system("cls");
     database db;
 
     if (!abrir_database(&db))
@@ -19,7 +20,7 @@ int main()
     iniciar_sistema(&db);
 
     fechar_database(&db);
-    printf("\nSistema encerrado. Dados salvos.\n");
+    printf("\nSistema encerrado. Dados salvos.\n\n");
 
     system("pause");
     return 0;

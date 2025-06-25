@@ -9,7 +9,6 @@
 #define MAX_FILE 260
 #define MAX_BUFFER 1024
 
-
 // Entrada: Ponteiro para o arquivo de livros e uma struct 'livro' com os dados.
 // Retorno: Nenhum
 // Pré-condição: O ponteiro de arquivo deve ser válido e aberto em "r+b",a struct 'novo' deve estar preenchida.
@@ -47,7 +46,7 @@ void cadastrar_livro(FILE *arq_livros)
 
     livro novo_livro;
 
-    printf("\n================== Cadastro de novo livro =================\n");
+    printf("\n=============================== Cadastro de novo livro ===============================\n");
     printf("\nDigite as credenciais a seguir:\n");
     printf("Codigo: ");
     scanf("%d%*c", &novo_livro.codigo);
@@ -65,8 +64,9 @@ void cadastrar_livro(FILE *arq_livros)
     scanf("%d%*c", &novo_livro.exemplares);
     printf("\nLivro cadastrado com sucesso!\n");
     insere_livro_cabeca(arq_livros, novo_livro);
-    
-    printf("\n===========================================================\n");
+
+    printf("\n======================================================================================\n");
+
 }
 
 // Entrada: Ponteiro para o arquivo, a posição do registro e um ponteiro para uma struct 'livro' de destino.
@@ -106,86 +106,92 @@ void imprimir_dados_livro(FILE *arq_livros)
     }
 
     int pos = c->pos_cabeca;
-    int flag = 0;
-    livro *aux = (livro *)malloc(sizeof(livro));
+    livro *aux = NULL;
 
-    // enquanto a lista nao chegar ao fim, a busca do livro nao for bem sucedida e o codigo nao for igual, a pos recebe a prox pos da lista
-    while (pos != -1 && !flag)
+    // enquanto a lista nao chegar ao fim
+    while (pos != -1)
     {
+        aux = le_livro(arq_livros, pos);
 
-        if (busca_livro(arq_livros, pos, aux))
-        {
-            if (aux->codigo == codigo)
-                flag = 1;
-            else
+        if (aux)
+        {   
+            // quer dizer que encontrou o codigo na lista
+            if (aux->codigo == codigo) {
+            printf("\n======================================== Livro =======================================\n");
+            printf("Codigo: %03d\n", aux->codigo);
+            printf("Titulo: %s\n", aux->titulo);
+            printf("Autor: %s\n", aux->autor);
+            printf("Editora: %s\n", aux->editora);
+            printf("Numero da edicao: %d\n", aux->edicao);
+            printf("Ano: %d\n", aux->ano);
+            printf("Quantidade de exemplares: %d", aux->exemplares);
+            printf("\n======================================================================================\n");
+
+            free(aux);
+            free(c);
+            return;
+            }
+            else {
                 pos = aux->prox_pos;
+                free(aux);
+            }
         }
-        else
-            pos = -1;
-    }
-
-    // quer dizer que encontrou o codigo na lista
-    if (flag == 1)
-    {
-        printf("\n=========================== Livro =========================\n");
-        printf("Codigo: %03d\n", aux->codigo);
-        printf("Titulo: %s\n", aux->titulo);
-        printf("Autor: %s\n", aux->autor);
-        printf("Editora: %s\n", aux->editora);
-        printf("Numero da edicao: %d\n", aux->edicao);
-        printf("Ano: %d\n", aux->ano);
-        printf("Quantidade de exemplares: %d", aux->exemplares);
-        printf("\n===========================================================\n");
-
+        else pos = -1;
     }
 
     // chegou ao final da lista e nao encontrou
-    else
-    {
-        printf("\n--> Sentimos muito, o livro com codigo '%03d' nao existe em nosso historico ou nao foi encontrado... <--\n", codigo);
-    }
-    free(aux);
+    printf("\n--> Sentimos muito, o livro com codigo '%03d' nao existe em nosso historico ou nao foi encontrado... <--\n", codigo);
+
     free(c);
+}
+
+// Entrada: Ponteiro para o arquivo de livros e um valor inteiro de posicao do livro.
+// Retorno: Nenhum
+// Pré-condição: O ponteiro de arquivo deve ser válido e aberto em "r+b".
+// Pós-condição: Uma lista formatada com código, título, autor e exemplares de todos os livros eh exibida na tela recursivamente.
+static void imprimir_recursivo(FILE *arq_livros, int pos_atual) {
+
+    if(pos_atual == -1)
+        return;
+
+    livro *livro_atual = le_livro(arq_livros, pos_atual);
+
+    if(livro_atual) {
+
+    imprimir_recursivo(arq_livros, livro_atual->prox_pos);
+
+    printf("%03d | %-35s | %-20s | %d\n", livro_atual->codigo, livro_atual->titulo, livro_atual->autor, livro_atual->exemplares);
+    
+    free(livro_atual);
+    }
+    else 
+    printf("\nFalha ao ler registro de livro na posicao %d\n", pos_atual);
+
 }
 
 // Entrada: Ponteiro para o arquivo de livros.
 // Retorno: Nenhum
 // Pré-condição: O ponteiro de arquivo deve ser válido e aberto em "r+b".
-// Pós-condição: Uma lista formatada com código, título, autor e exemplares de todos os livros eh exibida na tela.
+// Pós-condição: Imprime o escopo de impressão da lista de livros e chama a função imprimir_recursivo
 void listar_livros(FILE *arq_livros)
 {
     cabecalho *aux = le_cabecalho(arq_livros);
-    int i = aux->pos_cabeca;
-    if (i == -1)
+    if (aux->pos_cabeca == -1)
     {
         printf("\nNenhum livro foi cadastrado...\n");
     }
     else
-    {   
-        printf("\n===================== Lista de Livros =====================\n");
-        printf("%s | %s | %s | %s\n", "Cod", "Titulo", "Autor", "Exemplares");
-        printf("===========================================================\n");
+    {  
+        printf("\n================================== Lista de Livros ===================================\n");
+        printf("%-3s | %-35s | %-20s | %s\n", "Cod", "Titulo", "Autor", "Exemplares");
+        printf("======================================================================================\n");
 
-        while (i != -1)
-        {
-            livro *livro_atual = le_livro(arq_livros, i);
-            if (livro_atual)
-            {
-                printf("%03d | %s | %s | %d\n", livro_atual->codigo, livro_atual->titulo, livro_atual->autor, livro_atual->exemplares);
-                i = livro_atual->prox_pos;
-                free(livro_atual);
-            }
-            else
-            {
-                printf("\nFalha ao ler registro de livro na posicao %d\n", i);
-                i = -1;
-            }
-        }
-        printf("===========================================================\n");
+        imprimir_recursivo(arq_livros, aux->pos_cabeca);
+
+        printf("======================================================================================\n");
     }
     free(aux);
 }
-
 
 // Entrada: Ponteiro para o arquivo de livros
 // Retorno: Nenhum
@@ -211,8 +217,8 @@ void buscar_titulo(FILE *arq_livros)
             // se os títulos forem iguais, o livro foi encontrado
             // imprime um cabeçalho apenas na primeira vez que um livro eh encontrado
             if (!encontrado)
-            {   
-                printf("\n================== Livro(s) Encontrado(s) =================\n");
+            {  
+                printf("\n=================================== Livro Encontrado =================================\n");
                 encontrado = 1; // atualiza a flag
             }
             printf("Codigo: %03d\n", livro_atual->codigo);
@@ -222,7 +228,7 @@ void buscar_titulo(FILE *arq_livros)
             printf("Edicao: %d\n", livro_atual->edicao);
             printf("Ano: %d\n", livro_atual->ano);
             printf("Exemplares: %d", livro_atual->exemplares);
-            printf("\n===========================================================\n");
+            printf("\n======================================================================================\n");
         }
         // guarda a posição do proximo livro na lista
         int proxima_pos = livro_atual->prox_pos;
@@ -268,9 +274,10 @@ void calcular_total(FILE *arq_livros)
             livre_atual = -1;
         }
     }
-    printf("\n===========================================================\n");
-    printf("               Total de livros cadastrados: %d         ", total_topo - temp);
-    printf("\n===========================================================\n");
+    printf("\n======================================================================================\n");
+    printf("                            Total de livros cadastrados: %d         ", total_topo - temp);
+    printf("\n======================================================================================\n");
+
     free(cab);
 }
 
@@ -342,7 +349,8 @@ void carregar_lote(database *db)
     char nome_arquivo[MAX_FILE]; // 255 carac. + '.txt' + '\0'
     char buffer[MAX_BUFFER];
     FILE *arq_lote;
-    printf("\n============= Sistema de Carregamento em Lote =============\n\n");
+
+    printf("\n========================== Sistema de Carregamento em Lote ===========================\n\n");
     printf("Bem-vindo(a), Usuario! Antes de prosseguirmos, para realizar o carregamento de seu arquivo com sucesso:\n");
     printf("- O nome de seu arquivo texto deve ter, no maximo, 255 caracteres -\n\n");
 
@@ -460,5 +468,27 @@ void carregar_lote(database *db)
         }
     }
     printf("\nCarregamento em lote concluido! %d registros processados.\n", count);
-    printf("\n===========================================================\n\n");
+    printf("\n======================================================================================\n");
+
+}
+
+// Entrada: Ponteiro para o arquivo de livros e o código do livro a ser buscado.
+// Retorno: Ponteiro para uma string (char*) alocada dinamicamente, contendo o
+// título do livro ou "Titulo Desconhecido". O chamador da função é responsável por liberar esta memória com free().
+// Pré-condição: O ponteiro de arquivo 'arq_livros' deve ser válido e o arquivo deve estar aberto em modo de leitura.
+// Pós-condição: Nenhuma. A função nao modifica o arquivo de livros.
+char* buscar_titulo_livro(FILE *arq_livros, int codigo) {
+    int pos = buscar_pos_livro(arq_livros, codigo);
+    if (pos != -1) {
+        livro *l = le_livro(arq_livros, pos);
+        if (l) {
+            char *titulo = malloc(strlen(l->titulo) + 1);
+            strcpy(titulo, l->titulo);
+            free(l);
+            return titulo;
+        }
+    }
+    char *nao_encontrado = malloc(strlen("Titulo Desconhecido") + 1);
+    strcpy(nao_encontrado, "Titulo Desconhecido");
+    return nao_encontrado;
 }
