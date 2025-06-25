@@ -9,7 +9,6 @@
 #define MAX_FILE 260
 #define MAX_BUFFER 1024
 
-
 // Entrada: Ponteiro para o arquivo de livros e uma struct 'livro' com os dados.
 // Retorno: Nenhum
 // Pré-condição: O ponteiro de arquivo deve ser válido e aberto em "r+b",a struct 'novo' deve estar preenchida.
@@ -107,45 +106,42 @@ void imprimir_dados_livro(FILE *arq_livros)
     }
 
     int pos = c->pos_cabeca;
-    int flag = 0;
-    livro *aux = (livro *)malloc(sizeof(livro));
+    livro *aux = NULL;
 
-    // enquanto a lista nao chegar ao fim, a busca do livro nao for bem sucedida e o codigo nao for igual, a pos recebe a prox pos da lista
-    while (pos != -1 && !flag)
+    // enquanto a lista nao chegar ao fim
+    while (pos != -1)
     {
+        aux = le_livro(arq_livros, pos);
 
-        if (busca_livro(arq_livros, pos, aux))
-        {
-            if (aux->codigo == codigo)
-                flag = 1;
-            else
+        if (aux)
+        {   
+            // quer dizer que encontrou o codigo na lista
+            if (aux->codigo == codigo) {
+            printf("\n======================================== Livro =======================================\n");
+            printf("Codigo: %03d\n", aux->codigo);
+            printf("Titulo: %s\n", aux->titulo);
+            printf("Autor: %s\n", aux->autor);
+            printf("Editora: %s\n", aux->editora);
+            printf("Numero da edicao: %d\n", aux->edicao);
+            printf("Ano: %d\n", aux->ano);
+            printf("Quantidade de exemplares: %d", aux->exemplares);
+            printf("\n======================================================================================\n");
+
+            free(aux);
+            free(c);
+            return;
+            }
+            else {
                 pos = aux->prox_pos;
+                free(aux);
+            }
         }
-        else
-            pos = -1;
-    }
-
-    // quer dizer que encontrou o codigo na lista
-    if (flag == 1)
-    {
-        printf("\n======================================== Livro =======================================\n");
-        printf("Codigo: %03d\n", aux->codigo);
-        printf("Titulo: %s\n", aux->titulo);
-        printf("Autor: %s\n", aux->autor);
-        printf("Editora: %s\n", aux->editora);
-        printf("Numero da edicao: %d\n", aux->edicao);
-        printf("Ano: %d\n", aux->ano);
-        printf("Quantidade de exemplares: %d", aux->exemplares);
-        printf("\n======================================================================================\n");
-
+        else pos = -1;
     }
 
     // chegou ao final da lista e nao encontrou
-    else
-    {
-        printf("\n--> Sentimos muito, o livro com codigo '%03d' nao existe em nosso historico ou nao foi encontrado... <--\n", codigo);
-    }
-    free(aux);
+    printf("\n--> Sentimos muito, o livro com codigo '%03d' nao existe em nosso historico ou nao foi encontrado... <--\n", codigo);
+
     free(c);
 }
 

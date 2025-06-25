@@ -59,53 +59,65 @@ void registra_emprestimo(database *db, int codigo_livro, int codigo_usuario, cha
         return;
     }
 
-    if (buscar_pos_emprestimo(db->arq_emprestimos, codigo_livro, codigo_usuario) != -1)
-    {
-        printf("\nERRO: Este usuario ja possui um emprestimo ativo para este livro e nao pode empresta-lo novamente.\n");
-        return; // impede o novo empréstimo
-    }
+    usuario *usuario_para_emprestar = le_usuario(db->arq_usuarios, pos_usuario);
+    if(!usuario_para_emprestar) return;
 
     livro *livro_para_emprestar = le_livro(db->arq_livros, pos_livro);
-
-    if (livro_para_emprestar->exemplares <= 0)
-    {
-        printf("\nSentimos muito, mas nao ha exemplares do livro '%s' disponiveis para emprestimo.\n", livro_para_emprestar->titulo);
-        free(livro_para_emprestar);
-        return;
-    }
-
-    livro_para_emprestar->exemplares--;
-    escreve_livro(db->arq_livros, livro_para_emprestar, pos_livro);
+    if (!livro_para_emprestar) return;
 
     emprestimo novo_emprestimo;
     novo_emprestimo.codigo_livro = codigo_livro;
     novo_emprestimo.codigo_usuario = codigo_usuario;
 
-    if (strcmp(data_emprestimo, "") == 0)
-    {
-
-        // obtem a data atual do sistema, conforme requisito
-        time_t t = time(NULL);
-        struct tm tm = *localtime(&t);
-
-        // para formatar data
-        strftime(novo_emprestimo.data_emprestimo, sizeof(novo_emprestimo.data_emprestimo), "%d/%m/%Y", &tm);
-    }
-
-    else
-    {
-        strcpy(novo_emprestimo.data_emprestimo, data_emprestimo);
-    }
-
     strcpy(novo_emprestimo.data_devolucao, data_devolucao);
 
+    // para registros históricos, com emprestimo e devolucao cadastrados
+    if (strlen(novo_emprestimo.data_devolucao) > 0)
+    {
+        strcpy(novo_emprestimo.data_emprestimo, data_emprestimo);
+        printf("\nINFO: Registrando emprestimo historico (com devolucao) do livro '%s' para %s.\n", livro_para_emprestar->titulo, usuario_para_emprestar->nome);
+    }
+    
+    //se nao houver data de devolução, é um novo empréstimo
+    else {
+
+        if (buscar_pos_emprestimo(db->arq_emprestimos, codigo_livro, codigo_usuario) != -1)
+        {
+        printf("\nSentimos muito, mas o(a) %s ja possui um emprestimo ativo para este livro e nao podemos empresta-lo novamente.\n", usuario_para_emprestar->nome);
+        return; // impede o novo empréstimo
+        }
+
+        if (livro_para_emprestar->exemplares <= 0)
+        {
+        printf("\nSentimos muito, mas nao ha exemplares do livro '%s' disponiveis para emprestimo.\n", livro_para_emprestar->titulo);
+        free(livro_para_emprestar);
+        free(usuario_para_emprestar);
+        return;
+        }
+
+        livro_para_emprestar->exemplares--;
+        escreve_livro(db->arq_livros, livro_para_emprestar, pos_livro);
+        
+        if (strcmp(data_emprestimo, "") == 0)
+        {
+            
+            // obtem a data atual do sistema, conforme requisito
+            time_t t = time(NULL);
+            struct tm tm = *localtime(&t);
+            
+            // para formatar data
+            strftime(novo_emprestimo.data_emprestimo, sizeof(novo_emprestimo.data_emprestimo), "%d/%m/%Y", &tm);
+        }
+        
+        else strcpy(novo_emprestimo.data_emprestimo, data_emprestimo);
+     
+        printf("\n>>> Emprestimo realizado com sucesso! <<<\n");
+        printf("Livro '%s' emprestado em %s para %s.\n", livro_para_emprestar->titulo, novo_emprestimo.data_emprestimo, usuario_para_emprestar->nome);
+    }
+    
     insere_emprestimo_cabeca(db->arq_emprestimos, novo_emprestimo);
-
-    printf("\n>>> Emprestimo realizado com sucesso! <<<\n");
-    printf("Livro '%s' emprestado em %s.\n", livro_para_emprestar->titulo, novo_emprestimo.data_emprestimo);
-
     free(livro_para_emprestar);
-    free(livro_para_emprestar);
+    free(usuario_para_emprestar);
 }
 
 // Entrada: Ponteiro para a struct 'database'.
